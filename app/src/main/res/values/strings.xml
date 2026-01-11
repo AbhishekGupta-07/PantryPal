@@ -1,0 +1,36 @@
+<resources>
+
+    <!-- App -->
+    <string name="app_name">PantryPal</string>
+    <string name="title_pantry">Your Pantry</string>
+
+    <!-- Empty State -->
+    <string name="empty_title">No Pantry Items</string>
+    <string name="empty_subtitle">Start by adding items to your pantry</string>
+    <string name="empty_image_desc">Empty pantry illustration</string>
+
+    <!-- Filters -->
+    <string name="filter_all">All</string>
+    <string name="filter_expired">Expired</string>
+    <string name="filter_expiring_soon">Expiring Soon</string>
+    <string name="filter_safe">Safe</string>
+
+    <!-- Pantry Item Labels -->
+    <string name="label_expiry">Expiry:</string>
+
+    <!-- Status Text -->
+    <string name="status_safe">Safe</string>
+    <string name="status_expired">Expired</string>
+    <string name="status_expiring_soon">Expiring Soon</string>
+
+    <!-- Menu / Accessibility -->
+    <string name="more_options">More options</string>
+
+    <!-- 🤖 AI Recipe Suggestions -->
+    <string name="ai_recipe_title">AI Recipe Suggestions</string>
+    <string name="ai_recipe_hint">How are you feeling?</string>
+    <string name="ai_get_recipe">Get Recipe</string>
+    <string name="ai_enter_mood">Please enter your mood</string>
+    <string name="ai_result_prefix">AI will suggest recipes based on mood:</string>
+
+</resources>
