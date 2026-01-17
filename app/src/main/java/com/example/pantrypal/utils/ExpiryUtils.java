@@ -9,6 +9,7 @@ public class ExpiryUtils {
 
     private static final int EXPIRING_SOON_DAYS = 7;
 
+    // Existing method (KEEP THIS)
     public static String getExpiryStatus(String expiryDate) {
 
         if (expiryDate == null || expiryDate.isEmpty()) {
@@ -38,5 +39,15 @@ public class ExpiryUtils {
         } catch (Exception e) {
             return "Safe";
         }
+    }
+
+    // ✅ NEW METHOD (THIS FIXES YOUR ERROR)
+    public static boolean isExpiringSoon(String expiryDate) {
+        return "Expiring Soon".equals(getExpiryStatus(expiryDate));
+    }
+
+    // ✅ OPTIONAL BUT GOOD
+    public static boolean isExpired(String expiryDate) {
+        return "Expired".equals(getExpiryStatus(expiryDate));
     }
 }

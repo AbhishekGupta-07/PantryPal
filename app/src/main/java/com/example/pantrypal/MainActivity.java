@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btnAdd, btnView, btnRecipe;
+    private Button btnAdd, btnView, btnRecipe, btnShopping;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
         btnAdd = findViewById(R.id.btnAddItem);
         btnView = findViewById(R.id.btnViewPantry);
         btnRecipe = findViewById(R.id.btnRecipe);
+        btnShopping = findViewById(R.id.btnShoppingList); // ✅ NEW
 
         btnAdd.setOnClickListener(v ->
                 startActivity(new Intent(this, AddItemActivity.class)));
@@ -27,5 +28,9 @@ public class MainActivity extends AppCompatActivity {
 
         btnRecipe.setOnClickListener(v ->
                 startActivity(new Intent(this, RecipeSuggestionActivity.class)));
+
+        // ✅ SHOPPING LIST NAVIGATION
+        btnShopping.setOnClickListener(v ->
+                startActivity(new Intent(this, ShoppingListActivity.class)));
     }
 }

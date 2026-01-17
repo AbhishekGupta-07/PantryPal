@@ -33,7 +33,15 @@
         android:id="@+id/btnRecipe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="AI Recipe Suggestions "
+        android:text="AI Recipe Suggestions"
+        android:layout_marginTop="16dp"/>
+
+    <!-- ✅ NEW SHOPPING LIST BUTTON -->
+    <Button
+        android:id="@+id/btnShoppingList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Shopping List"
         android:layout_marginTop="16dp"/>
 
 </LinearLayout>

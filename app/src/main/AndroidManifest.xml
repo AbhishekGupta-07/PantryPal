@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.pantrypal">
 
-    <!-- Notification permission (Android 13+) -->
+    <!-- Internet (AI / APIs) -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
@@ -13,22 +14,31 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PantryPal">
 
-        <!-- Recipe Suggestions (STEP 13.1) -->
+        <!-- ✅ SHOPPING LIST (FIX) -->
+        <activity
+            android:name=".ShoppingListActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".RecipeDetailActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".SavedRecipesActivity"
+            android:exported="false" />
+
         <activity
             android:name=".RecipeSuggestionActivity"
             android:exported="false" />
 
-        <!-- Pantry List -->
         <activity
             android:name=".PantryListActivity"
             android:exported="false" />
 
-        <!-- Add Item -->
         <activity
             android:name=".AddItemActivity"
             android:exported="false" />
 
-        <!-- Launcher -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
