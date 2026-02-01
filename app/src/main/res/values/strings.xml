@@ -4,6 +4,9 @@
     <string name="app_name">PantryPal</string>
     <string name="title_pantry">Your Pantry</string>
 
+    <!-- 🔑 Google Sign-In (REQUIRED) -->
+    <string name="default_web_client_id">PASTE_WEB_CLIENT_ID_HERE</string>
+
     <!-- Empty State -->
     <string name="empty_title">No Pantry Items</string>
     <string name="empty_subtitle">Start by adding items to your pantry</string>

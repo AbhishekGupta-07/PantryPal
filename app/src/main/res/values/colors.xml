@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Default -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- PantryPal Premium Theme -->
+    <color name="pp_bg">#0F172A</color>          <!-- App background -->
+    <color name="pp_card">#141E33</color>        <!-- Card background -->
+    <color name="pp_primary">#7C3AED</color>     <!-- Main purple -->
+    <color name="pp_primary_dark">#5B21B6</color>
+    <color name="pp_text">#E5E7EB</color>        <!-- Main text -->
+    <color name="pp_text_muted">#9CA3AF</color>  <!-- Subtitle text -->
+    <color name="pp_danger">#EF4444</color>      <!-- Logout / danger -->
+
 </resources>

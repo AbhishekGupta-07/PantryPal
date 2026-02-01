@@ -14,39 +14,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PantryPal">
 
-        <!-- ✅ SHOPPING LIST (FIX) -->
+        <!-- ✅ LOGIN = LAUNCHER -->
         <activity
-            android:name=".ShoppingListActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".RecipeDetailActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".SavedRecipesActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".RecipeSuggestionActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".PantryListActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".AddItemActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".MainActivity"
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- MAIN HOME -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+
+        <!-- OTHER SCREENS -->
+        <activity android:name=".AddItemActivity" android:exported="false" />
+        <activity android:name=".PantryListActivity" android:exported="false" />
+        <activity android:name=".RecipeSuggestionActivity" android:exported="false" />
+        <activity android:name=".SavedRecipesActivity" android:exported="false" />
+        <activity android:name=".RecipeDetailActivity" android:exported="false" />
+        <activity android:name=".ShoppingListActivity" android:exported="false" />
 
     </application>
 
