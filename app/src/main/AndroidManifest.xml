@@ -26,18 +26,17 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
 
         <!-- ================= LOGIN ================= -->
         <activity
             android:name=".LoginActivity"
-            android:exported="false" />
+            android:exported="true" />
 
         <!-- ================= MAIN (Bottom Nav) ================= -->
         <activity
             android:name=".MainActivity"
-            android:exported="false" />
+            android:exported="true" />
 
         <!-- ================= OTHER SCREENS ================= -->
         <activity android:name=".AddItemActivity" android:exported="false" />

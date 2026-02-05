@@ -5,31 +5,26 @@ import java.util.List;
 
 public class RecipeAIBrain {
 
-    /**
-     * Main AI method
-     * @param mood user mood (happy, sad, tired, etc.)
-     * @param season current season (summer, winter, monsoon)
-     * @param expiringItems pantry items that are expiring soon
-     */
     public static String generateRecipe(
             String mood,
             String season,
             List<String> expiringItems
     ) {
+        if (mood == null || mood.trim().isEmpty()) mood = "normal";
+        if (season == null || season.trim().isEmpty()) season = "balanced";
 
         StringBuilder recipe = new StringBuilder();
 
-        // Title
         recipe.append("🍽 Recipe Suggestion\n\n");
 
         // Mood based logic
-        if (mood.equalsIgnoreCase("happy")) {
+        if ("happy".equalsIgnoreCase(mood)) {
             recipe.append("Mood: Happy 😊\n");
             recipe.append("Try something special and flavorful.\n\n");
-        } else if (mood.equalsIgnoreCase("tired")) {
+        } else if ("tired".equalsIgnoreCase(mood)) {
             recipe.append("Mood: Tired 😴\n");
             recipe.append("Quick and light food is best.\n\n");
-        } else if (mood.equalsIgnoreCase("sad")) {
+        } else if ("sad".equalsIgnoreCase(mood)) {
             recipe.append("Mood: Sad 😔\n");
             recipe.append("Comfort food will help.\n\n");
         } else {
@@ -39,10 +34,12 @@ public class RecipeAIBrain {
 
         // Season based logic
         recipe.append("Season: ").append(season).append("\n");
-        if (season.equalsIgnoreCase("summer")) {
+        if ("summer".equalsIgnoreCase(season)) {
             recipe.append("Prefer light & cooling dishes.\n\n");
-        } else if (season.equalsIgnoreCase("winter")) {
+        } else if ("winter".equalsIgnoreCase(season)) {
             recipe.append("Warm & healthy food recommended.\n\n");
+        } else if ("monsoon".equalsIgnoreCase(season)) {
+            recipe.append("Hot & digestive food recommended.\n\n");
         } else {
             recipe.append("Balanced food recommended.\n\n");
         }
@@ -64,9 +61,6 @@ public class RecipeAIBrain {
         return recipe.toString();
     }
 
-    /**
-     * Helper: Dummy data if pantry empty
-     */
     public static List<String> getSampleExpiringItems() {
         List<String> items = new ArrayList<>();
         items.add("Tomato");

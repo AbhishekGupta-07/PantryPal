@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_filter"
+        android:title="Filter"
+        android:icon="@drawable/ic_filter_list_24"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/filter_all"
+        android:title="All Items"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/filter_expired"
+        android:title="Expired"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/filter_soon"
+        android:title="Expiring Soon"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/filter_safe"
+        android:title="Safe"
+        app:showAsAction="never" />
+
+</menu>

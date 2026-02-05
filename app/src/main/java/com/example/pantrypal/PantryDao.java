@@ -20,6 +20,16 @@ public interface PantryDao {
     @Delete
     void deleteItem(PantryItem item);
 
-    @Query("SELECT * FROM pantry_items")
+    // ✅ Latest items first
+    @Query("SELECT * FROM pantry_items ORDER BY id DESC")
     List<PantryItem> getAllItems();
+
+    // ✅ Dashboard counts (fast)
+    @Query("SELECT COUNT(*) FROM pantry_items")
+    int countTotal();
+
+    // ✅ Optional: expiry column name must match your PantryItem field name
+    // If your column is "expiryDate" then keep it same, warna change it.
+    @Query("SELECT COUNT(*) FROM pantry_items WHERE expiryDate IS NOT NULL AND expiryDate != ''")
+    int countHasExpiry();
 }

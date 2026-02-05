@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pantrypal.utils.ExpiryUtils;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
     public PantryAdapter(Context context, List<PantryItem> items) {
         this.context = context;
         this.pantryDao = PantryDatabase.getInstance(context).pantryDao();
-        itemList.addAll(items);
+        if (items != null) itemList.addAll(items);
     }
 
     @NonNull
@@ -43,34 +44,53 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder h, int pos) {
         PantryItem item = itemList.get(pos);
 
-        h.tvName.setText(item.getName());
-        h.tvExpiry.setText("Expiry: " + item.getExpiryDate());
+        // Name
+        h.tvName.setText(item.getName() == null ? "" : item.getName().trim());
 
-        String status = ExpiryUtils.getExpiryStatus(item.getExpiryDate());
+        // Expiry (clean display)
+        String exp = item.getExpiryDate();
+        if (exp == null || exp.trim().isEmpty()) {
+            h.tvExpiry.setText("Expiry: -");
+        } else {
+            h.tvExpiry.setText("Expiry: " + exp.trim());
+        }
+
+        // Status
+        String status = ExpiryUtils.getExpiryStatus(exp);
         h.tvStatus.setText(status);
 
-        if (status.equals("Expired")) {
+        if ("Expired".equalsIgnoreCase(status)) {
             h.tvStatus.setTextColor(Color.RED);
-        } else if (status.equals("Expiring Soon")) {
+        } else if ("Expiring Soon".equalsIgnoreCase(status)) {
             h.tvStatus.setTextColor(Color.parseColor("#FFA500"));
         } else {
             h.tvStatus.setTextColor(Color.parseColor("#4CAF50"));
         }
 
+        // 3-dot menu
         h.ivMore.setOnClickListener(v -> {
             PopupMenu popup = new PopupMenu(context, h.ivMore);
             popup.getMenuInflater().inflate(R.menu.item_actions_menu, popup.getMenu());
 
+            // OPTIONAL: show icons in popup menu (safe try-catch)
+            forceShowMenuIcons(popup);
+
             popup.setOnMenuItemClickListener(menuItem -> {
+                int currentPos = h.getAdapterPosition();
+                if (currentPos == RecyclerView.NO_POSITION) return false;
+
+                PantryItem currentItem = itemList.get(currentPos);
+
                 if (menuItem.getItemId() == R.id.action_edit) {
-                    showEditDialog(item);
+                    showEditDialog(currentItem, currentPos);
                     return true;
                 } else if (menuItem.getItemId() == R.id.action_delete) {
-                    showDeleteDialog(item);
+                    showDeleteDialog(currentItem, currentPos);
                     return true;
                 }
                 return false;
             });
+
             popup.show();
         });
     }
@@ -82,29 +102,33 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
 
     public void updateList(List<PantryItem> newList) {
         itemList.clear();
-        itemList.addAll(newList);
+        if (newList != null) itemList.addAll(newList);
         notifyDataSetChanged();
     }
 
-    private void showDeleteDialog(PantryItem item) {
+    private void showDeleteDialog(PantryItem item, int pos) {
         new AlertDialog.Builder(context)
                 .setTitle("Delete Item")
                 .setMessage("Delete this item?")
                 .setPositiveButton("Delete", (d, w) -> {
-                    pantryDao.deleteItem(item);
-                    int safePos = itemList.indexOf(item);
-                    if (safePos != -1) {
-                        itemList.remove(safePos);
-                        notifyItemRemoved(safePos);
-                    }
+                    new Thread(() -> {
+                        pantryDao.deleteItem(item);
+
+                        // UI update
+                        if (pos >= 0 && pos < itemList.size()) {
+                            itemList.remove(pos);
+                            runOnUi(() -> notifyItemRemoved(pos));
+                        } else {
+                            runOnUi(this::notifyDataSetChanged);
+                        }
+                    }).start();
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
     }
 
-    private void showEditDialog(PantryItem item) {
-        View dialog = LayoutInflater.from(context)
-                .inflate(R.layout.dialog_edit_item, null);
+    private void showEditDialog(PantryItem item, int pos) {
+        View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_edit_item, null);
 
         EditText etName = dialog.findViewById(R.id.etEditName);
         EditText etQty  = dialog.findViewById(R.id.etEditQty);
@@ -118,18 +142,47 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
                 .setTitle("Edit Item")
                 .setView(dialog)
                 .setPositiveButton("Update", (d, w) -> {
-                    item.setName(etName.getText().toString());
-                    item.setQuantity(etQty.getText().toString());
-                    item.setExpiryDate(etExp.getText().toString());
-                    pantryDao.updateItem(item);
+                    String newName = etName.getText().toString().trim();
+                    String newQty  = etQty.getText().toString().trim();
+                    String newExp  = etExp.getText().toString().trim();
 
-                    int safePos = itemList.indexOf(item);
-                    if (safePos != -1) {
-                        notifyItemChanged(safePos);
-                    }
+                    item.setName(newName);
+                    item.setQuantity(newQty);
+                    item.setExpiryDate(newExp);
+
+                    new Thread(() -> {
+                        pantryDao.updateItem(item);
+
+                        // UI update
+                        if (pos >= 0 && pos < itemList.size()) {
+                            runOnUi(() -> notifyItemChanged(pos));
+                        } else {
+                            runOnUi(this::notifyDataSetChanged);
+                        }
+                    }).start();
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
+    }
+
+    // --- Helpers ---
+    private void runOnUi(Runnable r) {
+        // context is Activity most of the time; safest:
+        try {
+            android.app.Activity a = (android.app.Activity) context;
+            a.runOnUiThread(r);
+        } catch (Exception e) {
+            // fallback
+            r.run();
+        }
+    }
+
+    private void forceShowMenuIcons(PopupMenu popup) {
+        try {
+            Method m = popup.getMenu().getClass().getDeclaredMethod("setOptionalIconsVisible", boolean.class);
+            m.setAccessible(true);
+            m.invoke(popup.getMenu(), true);
+        } catch (Exception ignored) {}
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

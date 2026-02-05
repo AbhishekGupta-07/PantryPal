@@ -1,15 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="20dp">
+    android:padding="16dp">
 
+    <!-- Title -->
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/tvPantryTitle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Pantry Tab"
-        android:textSize="22sp"
-        android:textStyle="bold" />
+        android:text="Your Pantry"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="?attr/colorOnBackground"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnFilter"
+        android:layout_marginEnd="12dp"/>
 
-</LinearLayout>
+    <!-- Filter Button (Top Right) -->
+    <ImageButton
+        android:id="@+id/btnFilter"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Filter"
+        android:padding="10dp"
+        android:src="@drawable/ic_filter_list_24"
+        app:tint="?attr/colorOnSurface"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPantry"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvPantryTitle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Empty State -->
+    <TextView
+        android:id="@+id/tvEmpty"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="No pantry items yet. Add your first item!"
+        android:textSize="14sp"
+        android:textColor="?attr/colorOnBackground"
+        android:alpha="0.7"
+        android:gravity="center"
+        android:padding="20dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/tvPantryTitle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
