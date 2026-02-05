@@ -1,9 +1,23 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.PantryPal" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ================= MAIN APP THEME ================= -->
+
+    <style name="Theme.PantryPal" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/pp_primary</item>
+        <item name="colorPrimaryContainer">@color/pp_primary_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <!-- Status bar / nav bar -->
+        <item name="android:statusBarColor">@color/pp_primary_dark</item>
+        <item name="android:navigationBarColor">@color/pp_bg</item>
     </style>
 
-    <style name="Theme.PantryPal" parent="Base.Theme.PantryPal" />
+    <!-- ================= SPLASH THEME ================= -->
+
+    <style name="Theme.PantryPal.Splash" parent="Theme.Material3.Light.NoActionBar">
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:statusBarColor">@color/white</item>
+    </style>
+
 </resources>

@@ -4,32 +4,42 @@
 
     <!-- Internet (AI / APIs) -->
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Android 13+ Notifications -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="PantryPal"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="PantryPal"
         android:supportsRtl="true"
         android:theme="@style/Theme.PantryPal">
 
-        <!-- ✅ LOGIN = LAUNCHER -->
+        <!-- ================= SPLASH (Launcher) ================= -->
         <activity
-            android:name=".LoginActivity"
-            android:exported="true">
+            android:name=".SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.PantryPal.Splash">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
-        <!-- MAIN HOME -->
+        <!-- ================= LOGIN ================= -->
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+
+        <!-- ================= MAIN (Bottom Nav) ================= -->
         <activity
             android:name=".MainActivity"
             android:exported="false" />
 
-        <!-- OTHER SCREENS -->
+        <!-- ================= OTHER SCREENS ================= -->
         <activity android:name=".AddItemActivity" android:exported="false" />
         <activity android:name=".PantryListActivity" android:exported="false" />
         <activity android:name=".RecipeSuggestionActivity" android:exported="false" />

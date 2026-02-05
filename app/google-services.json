@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "252701319602",
+    "project_id": "pantrypal-4d3de",
+    "storage_bucket": "pantrypal-4d3de.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:252701319602:android:e4b681d90dc6fb823e04ab",
+        "android_client_info": {
+          "package_name": "com.example.pantrypal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "252701319602-b4spuqu1iij8j859kirfvua5s1jjcu67.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pantrypal",
+            "certificate_hash": "568d4896eff7b7e58078ba83d844ac955844352d"
+          }
+        },
+        {
+          "client_id": "252701319602-68rkcqso4jujldm7rf5ji5ggth2f3afl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7VQOLCdJXo0iTGPGkE3U46WVrSW6ot6g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "252701319602-68rkcqso4jujldm7rf5ji5ggth2f3afl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
