@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#121212">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Title -->
+        <TextView
+            android:text="@string/ai_recipe_title"
+            android:textSize="22sp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <!-- Mood Input -->
+        <EditText
+            android:id="@+id/etMood"
+            android:hint="@string/ai_recipe_hint"
+            android:inputType="text"
+            android:minHeight="48dp"
+            android:padding="12dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="#AAAAAA"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- Get Recipe Button -->
+        <Button
+            android:id="@+id/btnGetRecipe"
+            android:text="@string/ai_get_recipe"
+            android:layout_marginTop="20dp"
+            android:minHeight="48dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <!-- ⏳ Loading -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_marginTop="16dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <!-- Dish Name -->
+        <TextView
+            android:id="@+id/tvDishName"
+            android:layout_marginTop="24dp"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- Recipe Result -->
+        <TextView
+            android:id="@+id/tvRecipeResult"
+            android:layout_marginTop="12dp"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            android:lineSpacingExtra="6dp"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- ▶ Watch Video -->
+        <Button
+            android:id="@+id/btnWatchVideo"
+            android:text="▶ Watch Recipe Video"
+            android:layout_marginTop="16dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <!-- 📤 Share Recipe -->
+        <Button
+            android:id="@+id/btnShareRecipe"
+            android:text="📤 Share Recipe"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <!-- ❤️ Save Recipe -->
+        <Button
+            android:id="@+id/btnSaveRecipe"
+            android:text="❤️ Save Recipe"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <!-- 📂 View Saved Recipes (NEW – IMPORTANT) -->
+        <Button
+            android:id="@+id/btnViewSavedRecipes"
+            android:text="📂 View Saved Recipes"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+</ScrollView>

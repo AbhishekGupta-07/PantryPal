@@ -1,12 +1,11 @@
 package com.example.pantrypal.ui.pantry;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,8 +26,15 @@ import java.util.List;
 
 public class PantryFragment extends Fragment {
 
+    // ✅ Fragment Result keys (must match HomeFragment)
+    private static final String RESULT_KEY = "pantry_filter_request";
+    private static final String FILTER_KEY = "filter";
+
+    private String pendingFilter = null;
+
     private RecyclerView rvPantry;
     private TextView tvEmpty;
+    private ImageButton btnFilter;
 
     private PantryAdapter adapter;
     private PantryDao pantryDao;
@@ -37,6 +43,22 @@ public class PantryFragment extends Fragment {
     private Filter currentFilter = Filter.ALL;
 
     public PantryFragment() {}
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // ✅ Listen filter request from Home
+        getParentFragmentManager().setFragmentResultListener(
+                RESULT_KEY,
+                this,
+                (requestKey, bundle) -> {
+                    pendingFilter = bundle.getString(FILTER_KEY, "ALL");
+                    applyPendingFilterIfPossible();
+                    loadItems();
+                }
+        );
+    }
 
     @Nullable
     @Override
@@ -50,10 +72,9 @@ public class PantryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        setHasOptionsMenu(true);
-
         rvPantry = view.findViewById(R.id.rvPantry);
         tvEmpty = view.findViewById(R.id.tvEmpty);
+        btnFilter = view.findViewById(R.id.btnFilter);
 
         rvPantry.setLayoutManager(new LinearLayoutManager(requireContext()));
 
@@ -62,6 +83,10 @@ public class PantryFragment extends Fragment {
         adapter = new PantryAdapter(requireContext(), new ArrayList<>());
         rvPantry.setAdapter(adapter);
 
+        // ✅ GUARANTEED click working
+        btnFilter.setOnClickListener(v -> showFilterDialog());
+
+        applyPendingFilterIfPossible();
         loadItems();
     }
 
@@ -74,6 +99,8 @@ public class PantryFragment extends Fragment {
     private void loadItems() {
         new Thread(() -> {
             List<PantryItem> list = pantryDao.getAllItems();
+
+            applyPendingFilterIfPossible();
             List<PantryItem> filtered = applyFilter(list);
 
             if (!isAdded()) return;
@@ -83,6 +110,26 @@ public class PantryFragment extends Fragment {
                 updateEmptyState(filtered);
             });
         }).start();
+    }
+
+    private void applyPendingFilterIfPossible() {
+        if (pendingFilter == null) return;
+
+        switch (pendingFilter) {
+            case "EXPIRED":
+                currentFilter = Filter.EXPIRED;
+                break;
+            case "SOON":
+                currentFilter = Filter.SOON;
+                break;
+            case "SAFE":
+                currentFilter = Filter.SAFE;
+                break;
+            default:
+                currentFilter = Filter.ALL;
+                break;
+        }
+        pendingFilter = null;
     }
 
     private List<PantryItem> applyFilter(List<PantryItem> list) {
@@ -122,31 +169,20 @@ public class PantryFragment extends Fragment {
         }
     }
 
-    // ---------------- MENU (Filter Icon) ----------------
+    private void showFilterDialog() {
+        final String[] options = {"All Items", "Expired", "Expiring Soon", "Safe"};
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.pantry_filter_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Filter")
+                .setItems(options, (dialog, which) -> {
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+                    if (which == 0) currentFilter = Filter.ALL;
+                    else if (which == 1) currentFilter = Filter.EXPIRED;
+                    else if (which == 2) currentFilter = Filter.SOON;
+                    else currentFilter = Filter.SAFE;
 
-        int id = item.getItemId();
-
-        if (id == R.id.action_filter) {
-            // icon click - kuch nahi, kyunki actual options menu me items already hain
-            return true;
-        }
-
-        if (id == R.id.filter_all) currentFilter = Filter.ALL;
-        else if (id == R.id.filter_expired) currentFilter = Filter.EXPIRED;
-        else if (id == R.id.filter_soon) currentFilter = Filter.SOON;
-        else if (id == R.id.filter_safe) currentFilter = Filter.SAFE;
-        else return super.onOptionsItemSelected(item);
-
-        loadItems();
-        return true;
+                    loadItems();
+                })
+                .show();
     }
 }

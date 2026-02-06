@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_main"
+    app:startDestination="@id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.pantrypal.ui.home.HomeFragment"
+        android:label="Home" />
+
+    <fragment
+        android:id="@+id/nav_pantry"
+        android:name="com.example.pantrypal.ui.pantry.PantryFragment"
+        android:label="Pantry" />
+
+    <fragment
+        android:id="@+id/nav_recipes"
+        android:name="com.example.pantrypal.ui.recipes.RecipesFragment"
+        android:label="Recipes" />
+
+    <fragment
+        android:id="@+id/nav_shopping"
+        android:name="com.example.pantrypal.ui.shopping.ShoppingFragment"
+        android:label="Shopping" />
+
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.example.pantrypal.ui.profile.ProfileFragment"
+        android:label="Profile" />
+
+</navigation>

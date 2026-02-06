@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">252701319602-68rkcqso4jujldm7rf5ji5ggth2f3afl.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">252701319602</string>
+    <string name="google_api_key" translatable="false">AIzaSyC7VQOLCdJXo0iTGPGkE3U46WVrSW6ot6g</string>
+    <string name="google_app_id" translatable="false">1:252701319602:android:e4b681d90dc6fb823e04ab</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyC7VQOLCdJXo0iTGPGkE3U46WVrSW6ot6g</string>
+    <string name="google_storage_bucket" translatable="false">pantrypal-4d3de.firebasestorage.app</string>
+    <string name="project_id" translatable="false">pantrypal-4d3de</string>
+</resources>

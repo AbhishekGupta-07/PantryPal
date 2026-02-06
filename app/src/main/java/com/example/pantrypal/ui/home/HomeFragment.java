@@ -20,11 +20,15 @@ import com.example.pantrypal.R;
 import com.example.pantrypal.RecipeSuggestionActivity;
 import com.example.pantrypal.ShoppingListActivity;
 import com.example.pantrypal.utils.ExpiryUtils;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
 
 public class HomeFragment extends Fragment {
+
+    private static final String RESULT_KEY = "pantry_filter_request";
+    private static final String FILTER_KEY = "filter";
 
     private TextView tvTotal, tvSoon, tvExpired, tvSafe;
     private MaterialButton btnAddItem, btnAskAI, btnShopping;
@@ -58,6 +62,8 @@ public class HomeFragment extends Fragment {
 
         pantryDao = PantryDatabase.getInstance(requireContext()).pantryDao();
 
+        // ---------------- Quick Actions ----------------
+
         btnAddItem.setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), AddItemActivity.class))
         );
@@ -74,13 +80,48 @@ public class HomeFragment extends Fragment {
             // Future profile navigation
         });
 
+        // ---------------- Dashboard Click ----------------
+
+        setClickable(tvTotal, "ALL");
+        setClickable(tvExpired, "EXPIRED");
+        setClickable(tvSoon, "SOON");
+        setClickable(tvSafe, "SAFE");
+
         loadDashboardCounts();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        loadDashboardCounts();   // Refresh when returning
+        loadDashboardCounts();
+    }
+
+    private void setClickable(TextView tv, String filter) {
+        if (tv == null) return;
+
+        // click on number itself
+        tv.setOnClickListener(v -> openPantryWithFilter(filter));
+
+        // click on parent container
+        View parent = (tv.getParent() instanceof View) ? (View) tv.getParent() : null;
+        if (parent != null) parent.setOnClickListener(v -> openPantryWithFilter(filter));
+
+        // click on parent's parent too (in case card layout is nested)
+        View parent2 = (parent != null && parent.getParent() instanceof View) ? (View) parent.getParent() : null;
+        if (parent2 != null) parent2.setOnClickListener(v -> openPantryWithFilter(filter));
+    }
+
+    private void openPantryWithFilter(String filter) {
+        if (!isAdded()) return;
+
+        Bundle b = new Bundle();
+        b.putString(FILTER_KEY, filter);
+        getParentFragmentManager().setFragmentResult(RESULT_KEY, b);
+
+        BottomNavigationView bottomNav = requireActivity().findViewById(R.id.bottomNav);
+        if (bottomNav != null) {
+            bottomNav.setSelectedItemId(R.id.nav_pantry);
+        }
     }
 
     private void loadDashboardCounts() {
@@ -97,16 +138,11 @@ public class HomeFragment extends Fragment {
             for (PantryItem item : all) {
                 String status = ExpiryUtils.getExpiryStatus(item.getExpiryDate());
 
-                if ("Expired".equalsIgnoreCase(status)) {
-                    expired++;
-                } else if ("Expiring Soon".equalsIgnoreCase(status)) {
-                    soon++;
-                } else {
-                    safe++;
-                }
+                if ("Expired".equalsIgnoreCase(status)) expired++;
+                else if ("Expiring Soon".equalsIgnoreCase(status)) soon++;
+                else safe++;
             }
 
-            // ✅ Make final copies for lambda
             final int finalTotal = total;
             final int finalExpired = expired;
             final int finalSoon = soon;
