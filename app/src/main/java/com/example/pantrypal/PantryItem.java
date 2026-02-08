@@ -2,6 +2,7 @@ package com.example.pantrypal;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.Ignore;
 
 @Entity(tableName = "pantry_items")
 public class PantryItem {
@@ -13,7 +14,12 @@ public class PantryItem {
     private String quantity;
     private String expiryDate;
 
-    // ✅ Constructor
+    // ✅ Required empty constructor for Room
+    public PantryItem() {
+    }
+
+    // ✅ Constructor for inserting data
+    @Ignore
     public PantryItem(String name, String quantity, String expiryDate) {
         this.name = name;
         this.quantity = quantity;
@@ -37,7 +43,7 @@ public class PantryItem {
         return expiryDate;
     }
 
-    // ✅ Setters (EDIT ke liye IMPORTANT)
+    // ✅ Setters (IMPORTANT for update)
     public void setId(int id) {
         this.id = id;
     }

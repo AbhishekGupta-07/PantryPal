@@ -6,6 +6,7 @@ import androidx.room.EntityDeletionOrUpdateAdapter;
 import androidx.room.EntityInsertionAdapter;
 import androidx.room.RoomDatabase;
 import androidx.room.RoomSQLiteQuery;
+import androidx.room.SharedSQLiteStatement;
 import androidx.room.util.CursorUtil;
 import androidx.room.util.DBUtil;
 import androidx.sqlite.db.SupportSQLiteStatement;
@@ -27,13 +28,15 @@ public final class PantryDao_Impl implements PantryDao {
 
   private final EntityDeletionOrUpdateAdapter<PantryItem> __updateAdapterOfPantryItem;
 
+  private final SharedSQLiteStatement __preparedStmtOfDeleteAll;
+
   public PantryDao_Impl(@NonNull final RoomDatabase __db) {
     this.__db = __db;
     this.__insertionAdapterOfPantryItem = new EntityInsertionAdapter<PantryItem>(__db) {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR ABORT INTO `pantry_items` (`id`,`name`,`quantity`,`expiryDate`) VALUES (nullif(?, 0),?,?,?)";
+        return "INSERT OR REPLACE INTO `pantry_items` (`id`,`name`,`quantity`,`expiryDate`) VALUES (nullif(?, 0),?,?,?)";
       }
 
       @Override
@@ -99,6 +102,14 @@ public final class PantryDao_Impl implements PantryDao {
         statement.bindLong(5, entity.getId());
       }
     };
+    this.__preparedStmtOfDeleteAll = new SharedSQLiteStatement(__db) {
+      @Override
+      @NonNull
+      public String createQuery() {
+        final String _query = "DELETE FROM pantry_items";
+        return _query;
+      }
+    };
   }
 
   @Override
@@ -138,6 +149,23 @@ public final class PantryDao_Impl implements PantryDao {
   }
 
   @Override
+  public void deleteAll() {
+    __db.assertNotSuspendingTransaction();
+    final SupportSQLiteStatement _stmt = __preparedStmtOfDeleteAll.acquire();
+    try {
+      __db.beginTransaction();
+      try {
+        _stmt.executeUpdateDelete();
+        __db.setTransactionSuccessful();
+      } finally {
+        __db.endTransaction();
+      }
+    } finally {
+      __preparedStmtOfDeleteAll.release(_stmt);
+    }
+  }
+
+  @Override
   public List<PantryItem> getAllItems() {
     final String _sql = "SELECT * FROM pantry_items ORDER BY id DESC";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
@@ -151,28 +179,31 @@ public final class PantryDao_Impl implements PantryDao {
       final List<PantryItem> _result = new ArrayList<PantryItem>(_cursor.getCount());
       while (_cursor.moveToNext()) {
         final PantryItem _item;
+        _item = new PantryItem();
+        final int _tmpId;
+        _tmpId = _cursor.getInt(_cursorIndexOfId);
+        _item.setId(_tmpId);
         final String _tmpName;
         if (_cursor.isNull(_cursorIndexOfName)) {
           _tmpName = null;
         } else {
           _tmpName = _cursor.getString(_cursorIndexOfName);
         }
+        _item.setName(_tmpName);
         final String _tmpQuantity;
         if (_cursor.isNull(_cursorIndexOfQuantity)) {
           _tmpQuantity = null;
         } else {
           _tmpQuantity = _cursor.getString(_cursorIndexOfQuantity);
         }
+        _item.setQuantity(_tmpQuantity);
         final String _tmpExpiryDate;
         if (_cursor.isNull(_cursorIndexOfExpiryDate)) {
           _tmpExpiryDate = null;
         } else {
           _tmpExpiryDate = _cursor.getString(_cursorIndexOfExpiryDate);
         }
-        _item = new PantryItem(_tmpName,_tmpQuantity,_tmpExpiryDate);
-        final int _tmpId;
-        _tmpId = _cursor.getInt(_cursorIndexOfId);
-        _item.setId(_tmpId);
+        _item.setExpiryDate(_tmpExpiryDate);
         _result.add(_item);
       }
       return _result;

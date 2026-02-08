@@ -22,7 +22,6 @@ public class PantryListActivity extends AppCompatActivity {
     private PantryAdapter adapter;
 
     private final List<PantryItem> allItems = new ArrayList<>();
-    private final List<PantryItem> displayItems = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,20 +36,17 @@ public class PantryListActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        // ✅ Load from DB
         List<PantryItem> dbItems =
                 PantryDatabase.getInstance(this)
                         .pantryDao()
                         .getAllItems();
 
         allItems.clear();
-        displayItems.clear();
+        if (dbItems != null) allItems.addAll(dbItems);
 
-        if (dbItems != null) {
-            allItems.addAll(dbItems);
-            displayItems.addAll(dbItems);
-        }
-
-        adapter = new PantryAdapter(this, displayItems);
+        // ✅ Use YOUR PantryAdapter (2 params)
+        adapter = new PantryAdapter(this, new ArrayList<>(allItems));
         recyclerView.setAdapter(adapter);
 
         toggleEmptyState();
@@ -82,12 +78,12 @@ public class PantryListActivity extends AppCompatActivity {
     private void applyFilter(String filter) {
         List<PantryItem> filtered = new ArrayList<>();
 
-        if (filter.equals("All")) {
+        if ("All".equals(filter)) {
             filtered.addAll(allItems);
         } else {
             for (PantryItem item : allItems) {
                 String status = ExpiryUtils.getExpiryStatus(item.getExpiryDate());
-                if (status.equals(filter)) {
+                if (status.equalsIgnoreCase(filter)) {
                     filtered.add(item);
                 }
             }

@@ -26,6 +26,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
     private final PantryDao pantryDao;
     private final List<PantryItem> itemList = new ArrayList<>();
 
+    // ✅ ONLY THIS CONSTRUCTOR (2 params)
     public PantryAdapter(Context context, List<PantryItem> items) {
         this.context = context;
         this.pantryDao = PantryDatabase.getInstance(context).pantryDao();
@@ -35,8 +36,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_pantry, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pantry, parent, false);
         return new ViewHolder(v);
     }
 
@@ -44,18 +44,11 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder h, int pos) {
         PantryItem item = itemList.get(pos);
 
-        // Name
         h.tvName.setText(item.getName() == null ? "" : item.getName().trim());
 
-        // Expiry (clean display)
         String exp = item.getExpiryDate();
-        if (exp == null || exp.trim().isEmpty()) {
-            h.tvExpiry.setText("Expiry: -");
-        } else {
-            h.tvExpiry.setText("Expiry: " + exp.trim());
-        }
+        h.tvExpiry.setText((exp == null || exp.trim().isEmpty()) ? "Expiry: -" : "Expiry: " + exp.trim());
 
-        // Status
         String status = ExpiryUtils.getExpiryStatus(exp);
         h.tvStatus.setText(status);
 
@@ -67,12 +60,9 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
             h.tvStatus.setTextColor(Color.parseColor("#4CAF50"));
         }
 
-        // 3-dot menu
         h.ivMore.setOnClickListener(v -> {
             PopupMenu popup = new PopupMenu(context, h.ivMore);
             popup.getMenuInflater().inflate(R.menu.item_actions_menu, popup.getMenu());
-
-            // OPTIONAL: show icons in popup menu (safe try-catch)
             forceShowMenuIcons(popup);
 
             popup.setOnMenuItemClickListener(menuItem -> {
@@ -100,6 +90,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
         return itemList.size();
     }
 
+    // ✅ use this everywhere
     public void updateList(List<PantryItem> newList) {
         itemList.clear();
         if (newList != null) itemList.addAll(newList);
@@ -113,14 +104,14 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
                 .setPositiveButton("Delete", (d, w) -> {
                     new Thread(() -> {
                         pantryDao.deleteItem(item);
-
-                        // UI update
-                        if (pos >= 0 && pos < itemList.size()) {
-                            itemList.remove(pos);
-                            runOnUi(() -> notifyItemRemoved(pos));
-                        } else {
-                            runOnUi(this::notifyDataSetChanged);
-                        }
+                        runOnUi(() -> {
+                            if (pos >= 0 && pos < itemList.size()) {
+                                itemList.remove(pos);
+                                notifyItemRemoved(pos);
+                            } else {
+                                notifyDataSetChanged();
+                            }
+                        });
                     }).start();
                 })
                 .setNegativeButton("Cancel", null)
@@ -152,27 +143,17 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
 
                     new Thread(() -> {
                         pantryDao.updateItem(item);
-
-                        // UI update
-                        if (pos >= 0 && pos < itemList.size()) {
-                            runOnUi(() -> notifyItemChanged(pos));
-                        } else {
-                            runOnUi(this::notifyDataSetChanged);
-                        }
+                        runOnUi(() -> notifyItemChanged(pos));
                     }).start();
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
     }
 
-    // --- Helpers ---
     private void runOnUi(Runnable r) {
-        // context is Activity most of the time; safest:
         try {
-            android.app.Activity a = (android.app.Activity) context;
-            a.runOnUiThread(r);
+            ((android.app.Activity) context).runOnUiThread(r);
         } catch (Exception e) {
-            // fallback
             r.run();
         }
     }

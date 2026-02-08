@@ -1,9 +1,11 @@
 package com.example.pantrypal;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -14,6 +16,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class MainActivity extends AppCompatActivity {
 
     private NavController navController;
+
+    // last non-shopping selected tab id
+    private int lastNonShoppingTabId = 0;
+
+    // shopping tab id (found dynamically)
+    private int shoppingTabId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,20 +39,60 @@ public class MainActivity extends AppCompatActivity {
 
         navController = navHostFragment.getNavController();
 
-        // ✅ Important: menu item ids MUST match nav_graph fragment ids
-        // menu:    @id/homeFragment, @id/pantryFragment, @id/recipesFragment, @id/shoppingFragment, @id/profileFragment
-        // navGraph: same ids
+        // Connect bottom nav with navController
         NavigationUI.setupWithNavController(bottomNav, navController);
 
-        // ✅ Prevent "re-click" from doing weird backstack behavior
-        bottomNav.setOnItemReselectedListener(item -> {
-            // do nothing
-        });
+        // Find shopping tab id by title (no hardcoded id)
+        shoppingTabId = findMenuItemIdByTitle(bottomNav.getMenu(), "shopping");
 
-        // ✅ Optional: log destination changes (helps when it "exits" due to crash in that fragment)
+        // Default last tab
+        lastNonShoppingTabId = bottomNav.getSelectedItemId();
+        if (lastNonShoppingTabId == 0) {
+            lastNonShoppingTabId = navController.getGraph().getStartDestinationId();
+        }
+
         navController.addOnDestinationChangedListener((controller, destination, arguments) ->
                 Log.d("NAV", "Now at: " + destination.getId())
         );
+
+        bottomNav.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            // If shopping id not found, behave normally
+            if (shoppingTabId == 0) {
+                return NavigationUI.onNavDestinationSelected(item, navController);
+            }
+
+            // If NOT shopping, navigate + update last tab
+            if (id != shoppingTabId) {
+                lastNonShoppingTabId = id;
+                return NavigationUI.onNavDestinationSelected(item, navController);
+            }
+
+            // Shopping clicked -> open activity
+            startActivity(new Intent(MainActivity.this, ShoppingListActivity.class));
+
+            // Immediately reselect last tab so UI doesn't stay on shopping
+            bottomNav.post(() -> bottomNav.setSelectedItemId(lastNonShoppingTabId));
+
+            return true; // handled
+        });
+
+        bottomNav.setOnItemReselectedListener(item -> {
+            // do nothing
+        });
+    }
+
+    private int findMenuItemIdByTitle(Menu menu, String keywordLower) {
+        if (menu == null) return 0;
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem it = menu.getItem(i);
+            CharSequence title = it.getTitle();
+            if (title != null && title.toString().toLowerCase().contains(keywordLower)) {
+                return it.getItemId();
+            }
+        }
+        return 0;
     }
 
     @Override

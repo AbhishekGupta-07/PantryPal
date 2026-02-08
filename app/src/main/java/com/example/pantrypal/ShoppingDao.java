@@ -20,6 +20,11 @@ public interface ShoppingDao {
     @Delete
     void delete(ShoppingItem item);
 
+    // ✅ Normal order (latest first)
     @Query("SELECT * FROM shopping_items ORDER BY id DESC")
     List<ShoppingItem> getAllItems();
+
+    // ✅ AUTO SORT: Unchecked first, Purchased bottom
+    @Query("SELECT * FROM shopping_items ORDER BY isPurchased ASC, id DESC")
+    List<ShoppingItem> getAllItemsSorted();
 }

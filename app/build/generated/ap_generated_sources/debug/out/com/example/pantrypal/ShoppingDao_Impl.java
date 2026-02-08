@@ -39,13 +39,13 @@ public final class ShoppingDao_Impl implements ShoppingDao {
       @Override
       protected void bind(@NonNull final SupportSQLiteStatement statement,
           final ShoppingItem entity) {
-        statement.bindLong(1, entity.id);
-        if (entity.itemName == null) {
+        statement.bindLong(1, entity.getId());
+        if (entity.getItemName() == null) {
           statement.bindNull(2);
         } else {
-          statement.bindString(2, entity.itemName);
+          statement.bindString(2, entity.getItemName());
         }
-        final int _tmp = entity.isPurchased ? 1 : 0;
+        final int _tmp = entity.isPurchased() ? 1 : 0;
         statement.bindLong(3, _tmp);
       }
     };
@@ -59,7 +59,7 @@ public final class ShoppingDao_Impl implements ShoppingDao {
       @Override
       protected void bind(@NonNull final SupportSQLiteStatement statement,
           final ShoppingItem entity) {
-        statement.bindLong(1, entity.id);
+        statement.bindLong(1, entity.getId());
       }
     };
     this.__updateAdapterOfShoppingItem = new EntityDeletionOrUpdateAdapter<ShoppingItem>(__db) {
@@ -72,15 +72,15 @@ public final class ShoppingDao_Impl implements ShoppingDao {
       @Override
       protected void bind(@NonNull final SupportSQLiteStatement statement,
           final ShoppingItem entity) {
-        statement.bindLong(1, entity.id);
-        if (entity.itemName == null) {
+        statement.bindLong(1, entity.getId());
+        if (entity.getItemName() == null) {
           statement.bindNull(2);
         } else {
-          statement.bindString(2, entity.itemName);
+          statement.bindString(2, entity.getItemName());
         }
-        final int _tmp = entity.isPurchased ? 1 : 0;
+        final int _tmp = entity.isPurchased() ? 1 : 0;
         statement.bindLong(3, _tmp);
-        statement.bindLong(4, entity.id);
+        statement.bindLong(4, entity.getId());
       }
     };
   }
@@ -134,17 +134,60 @@ public final class ShoppingDao_Impl implements ShoppingDao {
       final List<ShoppingItem> _result = new ArrayList<ShoppingItem>(_cursor.getCount());
       while (_cursor.moveToNext()) {
         final ShoppingItem _item;
+        _item = new ShoppingItem();
+        final int _tmpId;
+        _tmpId = _cursor.getInt(_cursorIndexOfId);
+        _item.setId(_tmpId);
         final String _tmpItemName;
         if (_cursor.isNull(_cursorIndexOfItemName)) {
           _tmpItemName = null;
         } else {
           _tmpItemName = _cursor.getString(_cursorIndexOfItemName);
         }
-        _item = new ShoppingItem(_tmpItemName);
-        _item.id = _cursor.getInt(_cursorIndexOfId);
+        _item.setItemName(_tmpItemName);
+        final boolean _tmpIsPurchased;
         final int _tmp;
         _tmp = _cursor.getInt(_cursorIndexOfIsPurchased);
-        _item.isPurchased = _tmp != 0;
+        _tmpIsPurchased = _tmp != 0;
+        _item.setPurchased(_tmpIsPurchased);
+        _result.add(_item);
+      }
+      return _result;
+    } finally {
+      _cursor.close();
+      _statement.release();
+    }
+  }
+
+  @Override
+  public List<ShoppingItem> getAllItemsSorted() {
+    final String _sql = "SELECT * FROM shopping_items ORDER BY isPurchased ASC, id DESC";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
+    __db.assertNotSuspendingTransaction();
+    final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+    try {
+      final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+      final int _cursorIndexOfItemName = CursorUtil.getColumnIndexOrThrow(_cursor, "itemName");
+      final int _cursorIndexOfIsPurchased = CursorUtil.getColumnIndexOrThrow(_cursor, "isPurchased");
+      final List<ShoppingItem> _result = new ArrayList<ShoppingItem>(_cursor.getCount());
+      while (_cursor.moveToNext()) {
+        final ShoppingItem _item;
+        _item = new ShoppingItem();
+        final int _tmpId;
+        _tmpId = _cursor.getInt(_cursorIndexOfId);
+        _item.setId(_tmpId);
+        final String _tmpItemName;
+        if (_cursor.isNull(_cursorIndexOfItemName)) {
+          _tmpItemName = null;
+        } else {
+          _tmpItemName = _cursor.getString(_cursorIndexOfItemName);
+        }
+        _item.setItemName(_tmpItemName);
+        final boolean _tmpIsPurchased;
+        final int _tmp;
+        _tmp = _cursor.getInt(_cursorIndexOfIsPurchased);
+        _tmpIsPurchased = _tmp != 0;
+        _item.setPurchased(_tmpIsPurchased);
         _result.add(_item);
       }
       return _result;

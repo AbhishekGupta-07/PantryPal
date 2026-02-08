@@ -38,6 +38,11 @@
             android:name=".MainActivity"
             android:exported="true" />
 
+        <!-- ✅ EDIT PROFILE -->
+        <activity
+            android:name=".ui.profile.EditProfileActivity"
+            android:exported="false" />
+
         <!-- ================= OTHER SCREENS ================= -->
         <activity android:name=".AddItemActivity" android:exported="false" />
         <activity android:name=".PantryListActivity" android:exported="false" />

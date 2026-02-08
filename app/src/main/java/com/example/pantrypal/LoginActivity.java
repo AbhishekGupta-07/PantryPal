@@ -9,17 +9,13 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.example.pantrypal.utils.Prefs;
+import com.google.android.gms.auth.api.signin.*;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.*;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -32,37 +28,34 @@ public class LoginActivity extends AppCompatActivity {
     private final ActivityResultLauncher<Intent> googleLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
 
-                // User pressed back / cancelled
-                if (result.getResultCode() != RESULT_OK) {
+                if (result.getResultCode() != RESULT_OK || result.getData() == null) {
                     Toast.makeText(this, "Google sign-in cancelled", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                Intent data = result.getData();
-                if (data == null) {
-                    Toast.makeText(this, "Google sign-in cancelled", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                Task<GoogleSignInAccount> task =
+                        GoogleSignIn.getSignedInAccountFromIntent(result.getData());
 
-                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
                 try {
                     GoogleSignInAccount account = task.getResult(ApiException.class);
-                    if (account == null) {
-                        Toast.makeText(this, "Google sign-in cancelled", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
                     firebaseAuthWithGoogle(account.getIdToken());
-
                 } catch (ApiException e) {
-                    Toast.makeText(this, "Google Sign-In failed: " + e.getStatusCode(), Toast.LENGTH_SHORT).show();
-                } catch (Exception e) {
-                    Toast.makeText(this, "Google Sign-In error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this,
+                            "Google Sign-In failed: " + e.getStatusCode(),
+                            Toast.LENGTH_SHORT).show();
                 }
             });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // ✅ If logged in via Prefs → go home
+        if (Prefs.isLoggedIn(this)) {
+            goToHome();
+            return;
+        }
+
         setContentView(R.layout.activity_login1);
 
         auth = FirebaseAuth.getInstance();
@@ -81,21 +74,10 @@ public class LoginActivity extends AppCompatActivity {
 
         btnLogin.setOnClickListener(v -> doEmailLogin());
 
-        // Always show account chooser (good for testing / multi accounts)
+        // ✅ IMPORTANT: NO signOut() here
         btnGoogle.setOnClickListener(v ->
-                googleClient.signOut().addOnCompleteListener(t ->
-                        googleLauncher.launch(googleClient.getSignInIntent())
-                )
+                googleLauncher.launch(googleClient.getSignInIntent())
         );
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // Auto-login (best place)
-        if (auth.getCurrentUser() != null) {
-            goToHome();
-        }
     }
 
     private void doEmailLogin() {
@@ -108,29 +90,40 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         auth.signInWithEmailAndPassword(email, pass)
-                .addOnSuccessListener(res -> goToHome())
+                .addOnSuccessListener(res -> {
+                    Prefs.setLoggedIn(this, true);
+                    goToHome();
+                })
                 .addOnFailureListener(err ->
-                        Toast.makeText(this, "Login failed: " + err.getMessage(), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this,
+                                "Login failed: " + err.getMessage(),
+                                Toast.LENGTH_SHORT).show()
                 );
     }
 
     private void firebaseAuthWithGoogle(String idToken) {
         if (idToken == null) {
-            Toast.makeText(this, "Missing ID token. Check google-services.json / SHA-1", Toast.LENGTH_LONG).show();
+            Toast.makeText(this,
+                    "Missing ID token. Check SHA-1 & google-services.json",
+                    Toast.LENGTH_LONG).show();
             return;
         }
 
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         auth.signInWithCredential(credential)
-                .addOnSuccessListener(res -> goToHome())
+                .addOnSuccessListener(res -> {
+                    Prefs.setLoggedIn(this, true);
+                    goToHome();
+                })
                 .addOnFailureListener(e ->
-                        Toast.makeText(this, "Firebase auth failed: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this,
+                                "Firebase auth failed: " + e.getMessage(),
+                                Toast.LENGTH_SHORT).show()
                 );
     }
 
     private void goToHome() {
         Intent i = new Intent(this, MainActivity.class);
-        // So user can't go back to login after successful login
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
         finish();

@@ -2,8 +2,8 @@
 <resources>
 
     <!-- ================= PRIMARY BUTTON STYLE ================= -->
-
-    <style name="PP_PrimaryButton" parent="Widget.Material3.Button">
+    <!-- NOTE: If your project doesn't support Material3, change parent to Widget.MaterialComponents.Button -->
+    <style name="PP_PrimaryButton" parent="Widget.MaterialComponents.Button">
         <item name="android:insetLeft">0dp</item>
         <item name="android:insetRight">0dp</item>
         <item name="cornerRadius">18dp</item>
@@ -14,6 +14,38 @@
 
         <item name="backgroundTint">@color/pp_primary</item>
         <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!-- ================= PROFILE ROW STYLES ================= -->
+    <style name="ProfileRow">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">14dp</item>
+    </style>
+
+    <style name="ProfileRowClickable">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">14dp</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="ProfileRowTitle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="ProfileDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">?attr/colorSurfaceVariant</item>
+        <item name="android:alpha">0.4</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
     </style>
 
 </resources>

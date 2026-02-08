@@ -7,13 +7,46 @@ import androidx.room.PrimaryKey;
 public class ShoppingItem {
 
     @PrimaryKey(autoGenerate = true)
-    public int id;
+    private int id;
 
-    public String itemName;
-    public boolean isPurchased;
+    private String itemName;
+    private boolean isPurchased;
 
+    // ✅ Required empty constructor for Room
+    public ShoppingItem() {
+    }
+
+    // ✅ Custom constructor
     public ShoppingItem(String itemName) {
         this.itemName = itemName;
         this.isPurchased = false;
+    }
+
+    // ----------------------
+    // Getters & Setters
+    // ----------------------
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public boolean isPurchased() {
+        return isPurchased;
+    }
+
+    public void setPurchased(boolean purchased) {
+        isPurchased = purchased;
     }
 }

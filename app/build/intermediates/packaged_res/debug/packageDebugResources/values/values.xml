@@ -10,6 +10,8 @@
     <color name="pp_text">#111827</color>
     <color name="pp_text_muted">#6B7280</color>
     <color name="white">#FFFFFFFF</color>
+    <string name="about_pantry_pal">About PantryPal</string>
+    <string name="account">Account</string>
     <string name="add_item">Add Item</string>
     <string name="ai_enter_mood">Please enter your mood</string>
     <string name="ai_get_recipe">Get Recipe</string>
@@ -17,16 +19,31 @@
     <string name="ai_recipe_title">AI Recipe Suggestions</string>
     <string name="ai_result_prefix">AI will suggest recipes based on mood:</string>
     <string name="app_name">PantryPal</string>
+    <string name="app_preferences">App Preferences</string>
+    <string name="app_version_format">PantryPal v%1$s</string>
+    <string name="avatar">Avatar</string>
+    <string name="cancel">Cancel</string>
+    <string name="choose_days_before">Choose how early you want expiry alerts.</string>
+    <string name="clear_pantry_data">Clear Pantry Data</string>
+    <string name="clear_pantry_msg">Are you sure?\nThis will permanently delete all pantry items.</string>
+    <string name="clear_pantry_title">Clear Pantry Data</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="data_management">Data Management</string>
+    <string name="days_before_3">3 Days Before</string>
+    <string name="days_before_format">%1$d Days Before</string>
     <string name="default_web_client_id" translatable="false">252701319602-68rkcqso4jujldm7rf5ji5ggth2f3afl.apps.googleusercontent.com</string>
+    <string name="delete">Delete</string>
     <string name="delete_item">Delete item</string>
     <string name="delete_item_confirm">Delete this item?</string>
     <string name="delete_recipe">Delete Recipe</string>
-    <string name="delete_recipe_confirm">
-        Are you sure you want to delete this recipe?
-    </string>
+    <string name="delete_recipe_confirm">Are you sure you want to delete this recipe?</string>
+    <string name="edit_profile">Edit Profile</string>
     <string name="empty_image_desc">Empty pantry illustration</string>
+    <string name="empty_label">Empty</string>
     <string name="empty_subtitle">Start by adding items to your pantry</string>
     <string name="empty_title">No Pantry Items</string>
+    <string name="expiry_reminder">Expiry Reminder</string>
+    <string name="filter">Filter</string>
     <string name="filter_all">All</string>
     <string name="filter_expired">Expired</string>
     <string name="filter_expiring_soon">Expiring Soon</string>
@@ -37,13 +54,21 @@
     <string name="google_crash_reporting_api_key" translatable="false">AIzaSyC7VQOLCdJXo0iTGPGkE3U46WVrSW6ot6g</string>
     <string name="google_storage_bucket" translatable="false">pantrypal-4d3de.firebasestorage.app</string>
     <string name="label_expiry">Expiry:</string>
+    <string name="logout">Logout</string>
+    <string name="logout_msg">Do you want to logout?</string>
+    <string name="logout_title">Logout</string>
     <string name="mark_item_done">Mark item as purchased</string>
     <string name="more_options">More options</string>
     <string name="no_saved_recipes">No Saved Recipes</string>
     <string name="no_saved_recipes_sub">Save recipes to see them here</string>
     <string name="no_shopping_items">No items in shopping list</string>
+    <string name="notifications">Notifications</string>
+    <string name="ok">OK</string>
+    <string name="profile_guest_mode">Guest Mode</string>
+    <string name="profile_name_default">Abhishek Gupta</string>
     <string name="project_id" translatable="false">pantrypal-4d3de</string>
     <string name="recipe_details">Recipe Details</string>
+    <string name="save">Save</string>
     <string name="saved_recipes_title">Saved Recipes</string>
     <string name="share_recipe">📤 Share Recipe</string>
     <string name="shopping_hint">Enter item</string>
@@ -51,8 +76,9 @@
     <string name="status_expired">Expired</string>
     <string name="status_expiring_soon">Expiring Soon</string>
     <string name="status_safe">Safe</string>
+    <string name="tap_to_add_items">Tap + to add items</string>
     <string name="title_pantry">Your Pantry</string>
-    <style name="PP_PrimaryButton" parent="Widget.Material3.Button">
+    <style name="PP_PrimaryButton" parent="Widget.MaterialComponents.Button">
         <item name="android:insetLeft">0dp</item>
         <item name="android:insetRight">0dp</item>
         <item name="cornerRadius">18dp</item>
@@ -63,6 +89,33 @@
 
         <item name="backgroundTint">@color/pp_primary</item>
         <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="ProfileDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">?attr/colorSurfaceVariant</item>
+        <item name="android:alpha">0.4</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+    </style>
+    <style name="ProfileRow">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">14dp</item>
+    </style>
+    <style name="ProfileRowClickable">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">14dp</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+    <style name="ProfileRowTitle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">14sp</item>
     </style>
     <style name="Theme.PantryPal" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/pp_primary</item>

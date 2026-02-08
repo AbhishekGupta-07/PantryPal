@@ -1,12 +1,10 @@
 package com.example.pantrypal.ui.pantry;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pantrypal.PantryAdapter;
-import com.example.pantrypal.PantryDao;
 import com.example.pantrypal.PantryDatabase;
 import com.example.pantrypal.PantryItem;
 import com.example.pantrypal.R;
@@ -26,46 +23,16 @@ import java.util.List;
 
 public class PantryFragment extends Fragment {
 
-    // ✅ Fragment Result keys (must match HomeFragment)
-    private static final String RESULT_KEY = "pantry_filter_request";
-    private static final String FILTER_KEY = "filter";
-
-    private String pendingFilter = null;
-
     private RecyclerView rvPantry;
-    private TextView tvEmpty;
     private ImageButton btnFilter;
+    private View layoutEmpty;
 
     private PantryAdapter adapter;
-    private PantryDao pantryDao;
 
-    private enum Filter { ALL, EXPIRED, SOON, SAFE }
-    private Filter currentFilter = Filter.ALL;
+    private final List<PantryItem> allItems = new ArrayList<>();
 
-    public PantryFragment() {}
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        // ✅ Listen filter request from Home
-        getParentFragmentManager().setFragmentResultListener(
-                RESULT_KEY,
-                this,
-                (requestKey, bundle) -> {
-                    pendingFilter = bundle.getString(FILTER_KEY, "ALL");
-                    applyPendingFilterIfPossible();
-                    loadItems();
-                }
-        );
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_pantry, container, false);
+    public PantryFragment() {
+        super(R.layout.fragment_pantry);
     }
 
     @Override
@@ -73,116 +40,73 @@ public class PantryFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         rvPantry = view.findViewById(R.id.rvPantry);
-        tvEmpty = view.findViewById(R.id.tvEmpty);
         btnFilter = view.findViewById(R.id.btnFilter);
+        layoutEmpty = view.findViewById(R.id.layoutEmpty);
 
         rvPantry.setLayoutManager(new LinearLayoutManager(requireContext()));
-
-        pantryDao = PantryDatabase.getInstance(requireContext()).pantryDao();
-
         adapter = new PantryAdapter(requireContext(), new ArrayList<>());
         rvPantry.setAdapter(adapter);
 
-        // ✅ GUARANTEED click working
-        btnFilter.setOnClickListener(v -> showFilterDialog());
+        btnFilter.setOnClickListener(v -> showFilterMenu());
 
-        applyPendingFilterIfPossible();
-        loadItems();
+        refreshList();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        loadItems(); // add/edit/delete ke baad refresh
+        refreshList();
     }
 
-    private void loadItems() {
+    private void refreshList() {
         new Thread(() -> {
-            List<PantryItem> list = pantryDao.getAllItems();
-
-            applyPendingFilterIfPossible();
-            List<PantryItem> filtered = applyFilter(list);
-
-            if (!isAdded()) return;
+            List<PantryItem> dbItems = PantryDatabase.getInstance(requireContext()).pantryDao().getAllItems();
+            allItems.clear();
+            if (dbItems != null) allItems.addAll(dbItems);
 
             requireActivity().runOnUiThread(() -> {
-                adapter.updateList(filtered);
-                updateEmptyState(filtered);
+                adapter.updateList(allItems);
+                updateEmptyState(allItems.isEmpty());
             });
         }).start();
     }
 
-    private void applyPendingFilterIfPossible() {
-        if (pendingFilter == null) return;
+    private void showFilterMenu() {
+        PopupMenu popup = new PopupMenu(requireContext(), btnFilter);
+        popup.getMenuInflater().inflate(R.menu.filter_menu, popup.getMenu());
 
-        switch (pendingFilter) {
-            case "EXPIRED":
-                currentFilter = Filter.EXPIRED;
-                break;
-            case "SOON":
-                currentFilter = Filter.SOON;
-                break;
-            case "SAFE":
-                currentFilter = Filter.SAFE;
-                break;
-            default:
-                currentFilter = Filter.ALL;
-                break;
-        }
-        pendingFilter = null;
+        popup.setOnMenuItemClickListener((MenuItem item) -> {
+            int id = item.getItemId();
+
+            if (id == R.id.filter_all) applyFilter("All");
+            else if (id == R.id.filter_expired) applyFilter("Expired");
+            else if (id == R.id.filter_expiring_soon) applyFilter("Expiring Soon");
+            else if (id == R.id.filter_safe) applyFilter("Safe");
+
+            return true;
+        });
+
+        popup.show();
     }
 
-    private List<PantryItem> applyFilter(List<PantryItem> list) {
-        if (list == null) return new ArrayList<>();
-        if (currentFilter == Filter.ALL) return list;
+    private void applyFilter(String filter) {
+        List<PantryItem> filtered = new ArrayList<>();
 
-        List<PantryItem> out = new ArrayList<>();
-
-        for (PantryItem item : list) {
-            String status = ExpiryUtils.getExpiryStatus(item.getExpiryDate());
-
-            if (currentFilter == Filter.EXPIRED && "Expired".equalsIgnoreCase(status)) {
-                out.add(item);
-            } else if (currentFilter == Filter.SOON && "Expiring Soon".equalsIgnoreCase(status)) {
-                out.add(item);
-            } else if (currentFilter == Filter.SAFE && "Safe".equalsIgnoreCase(status)) {
-                out.add(item);
+        if ("All".equals(filter)) {
+            filtered.addAll(allItems);
+        } else {
+            for (PantryItem item : allItems) {
+                String status = ExpiryUtils.getExpiryStatus(item.getExpiryDate());
+                if (filter.equals(status)) filtered.add(item);
             }
         }
-        return out;
+
+        adapter.updateList(filtered);
+        updateEmptyState(filtered.isEmpty());
     }
 
-    private void updateEmptyState(List<PantryItem> list) {
-        boolean empty = (list == null || list.isEmpty());
-
-        if (empty) {
-            rvPantry.setVisibility(View.GONE);
-            tvEmpty.setVisibility(View.VISIBLE);
-
-            if (currentFilter == Filter.EXPIRED) tvEmpty.setText("No expired items ✅");
-            else if (currentFilter == Filter.SOON) tvEmpty.setText("No items expiring soon ✅");
-            else if (currentFilter == Filter.SAFE) tvEmpty.setText("No safe items found");
-            else tvEmpty.setText("No pantry items yet. Add your first item!");
-        } else {
-            tvEmpty.setVisibility(View.GONE);
-            rvPantry.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void showFilterDialog() {
-        final String[] options = {"All Items", "Expired", "Expiring Soon", "Safe"};
-
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Filter")
-                .setItems(options, (dialog, which) -> {
-
-                    if (which == 0) currentFilter = Filter.ALL;
-                    else if (which == 1) currentFilter = Filter.EXPIRED;
-                    else if (which == 2) currentFilter = Filter.SOON;
-                    else currentFilter = Filter.SAFE;
-
-                    loadItems();
-                })
-                .show();
+    private void updateEmptyState(boolean isEmpty) {
+        layoutEmpty.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        rvPantry.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
     }
 }
