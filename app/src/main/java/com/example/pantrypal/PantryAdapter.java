@@ -26,7 +26,6 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
     private final PantryDao pantryDao;
     private final List<PantryItem> itemList = new ArrayList<>();
 
-    // ✅ ONLY THIS CONSTRUCTOR (2 params)
     public PantryAdapter(Context context, List<PantryItem> items) {
         this.context = context;
         this.pantryDao = PantryDatabase.getInstance(context).pantryDao();
@@ -46,8 +45,22 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
 
         h.tvName.setText(item.getName() == null ? "" : item.getName().trim());
 
+        // 🔥 PRICE SHOW (NEW)
+        double price = item.getPrice();
+        if (price > 0) {
+            h.tvPrice.setText("₹" + price);
+        } else {
+            h.tvPrice.setText("");
+        }
+
+        // 🔥 FORMAT FIX
         String exp = item.getExpiryDate();
-        h.tvExpiry.setText((exp == null || exp.trim().isEmpty()) ? "Expiry: -" : "Expiry: " + exp.trim());
+
+        String displayDate = (exp == null || exp.trim().isEmpty())
+                ? "-"
+                : formatToDisplay(exp.trim());
+
+        h.tvExpiry.setText("Expiry: " + displayDate);
 
         String status = ExpiryUtils.getExpiryStatus(exp);
         h.tvStatus.setText(status);
@@ -90,7 +103,6 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
         return itemList.size();
     }
 
-    // ✅ use this everywhere
     public void updateList(List<PantryItem> newList) {
         itemList.clear();
         if (newList != null) itemList.addAll(newList);
@@ -127,19 +139,15 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
 
         etName.setText(item.getName());
         etQty.setText(item.getQuantity());
-        etExp.setText(item.getExpiryDate());
+        etExp.setText(formatToDisplay(item.getExpiryDate()));
 
         new AlertDialog.Builder(context)
                 .setTitle("Edit Item")
                 .setView(dialog)
                 .setPositiveButton("Update", (d, w) -> {
-                    String newName = etName.getText().toString().trim();
-                    String newQty  = etQty.getText().toString().trim();
-                    String newExp  = etExp.getText().toString().trim();
 
-                    item.setName(newName);
-                    item.setQuantity(newQty);
-                    item.setExpiryDate(newExp);
+                    item.setName(etName.getText().toString().trim());
+                    item.setQuantity(etQty.getText().toString().trim());
 
                     new Thread(() -> {
                         pantryDao.updateItem(item);
@@ -148,6 +156,17 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
+    }
+
+    private String formatToDisplay(String isoDate) {
+        try {
+            java.time.LocalDate date = java.time.LocalDate.parse(isoDate);
+            java.time.format.DateTimeFormatter formatter =
+                    java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            return date.format(formatter);
+        } catch (Exception e) {
+            return isoDate;
+        }
     }
 
     private void runOnUi(Runnable r) {
@@ -167,7 +186,8 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvName, tvExpiry, tvStatus;
+
+        TextView tvName, tvExpiry, tvStatus, tvPrice; // 🔥 added price
         ImageView ivMore;
 
         ViewHolder(View v) {
@@ -175,6 +195,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
             tvName = v.findViewById(R.id.tvName);
             tvExpiry = v.findViewById(R.id.tvExpiry);
             tvStatus = v.findViewById(R.id.tvStatus);
+            tvPrice = v.findViewById(R.id.tvPrice); // 🔥 bind
             ivMore = v.findViewById(R.id.ivMore);
         }
     }

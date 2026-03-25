@@ -1,15 +1,17 @@
 package com.example.pantrypal.utils;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class ExpiryUtils {
 
-    private static final int EXPIRING_SOON_DAYS = 7;
+    private static final int EXPIRING_SOON_DAYS = 3;
 
-    // Existing method (KEEP THIS)
+    // ISO formatter (yyyy-MM-dd)
+    private static final DateTimeFormatter formatter =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    // 🔥 MAIN METHOD (Updated)
     public static String getExpiryStatus(String expiryDate) {
 
         if (expiryDate == null || expiryDate.isEmpty()) {
@@ -17,20 +19,12 @@ public class ExpiryUtils {
         }
 
         try {
-            SimpleDateFormat sdf =
-                    new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            LocalDate expiry = LocalDate.parse(expiryDate, formatter);
+            LocalDate today = LocalDate.now();
 
-            Date expiry = sdf.parse(expiryDate);
-            Date today = new Date();
-
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(today);
-            cal.add(Calendar.DAY_OF_YEAR, EXPIRING_SOON_DAYS);
-            Date soonDate = cal.getTime();
-
-            if (expiry.before(today)) {
+            if (expiry.isBefore(today)) {
                 return "Expired";
-            } else if (!expiry.after(soonDate)) {
+            } else if (!expiry.isAfter(today.plusDays(EXPIRING_SOON_DAYS))) {
                 return "Expiring Soon";
             } else {
                 return "Safe";
@@ -41,13 +35,23 @@ public class ExpiryUtils {
         }
     }
 
-    // ✅ NEW METHOD (THIS FIXES YOUR ERROR)
+    // ✅ Boolean helpers (used everywhere)
     public static boolean isExpiringSoon(String expiryDate) {
         return "Expiring Soon".equals(getExpiryStatus(expiryDate));
     }
 
-    // ✅ OPTIONAL BUT GOOD
     public static boolean isExpired(String expiryDate) {
         return "Expired".equals(getExpiryStatus(expiryDate));
+    }
+
+    // 🔥 NEW (IMPORTANT for next steps)
+    public static long daysLeft(String expiryDate) {
+        try {
+            LocalDate expiry = LocalDate.parse(expiryDate, formatter);
+            LocalDate today = LocalDate.now();
+            return java.time.temporal.ChronoUnit.DAYS.between(today, expiry);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 }

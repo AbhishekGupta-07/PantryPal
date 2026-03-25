@@ -3,6 +3,7 @@ package com.example.pantrypal;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.Ignore;
+import androidx.room.ColumnInfo;
 
 @Entity(tableName = "pantry_items")
 public class PantryItem {
@@ -14,16 +15,21 @@ public class PantryItem {
     private String quantity;
     private String expiryDate;
 
+    // 🔥 NEW FIELD (Price)
+    @ColumnInfo(name = "price")
+    private double price;
+
     // ✅ Required empty constructor for Room
     public PantryItem() {
     }
 
-    // ✅ Constructor for inserting data
+    // ✅ Constructor for inserting data (UPDATED)
     @Ignore
-    public PantryItem(String name, String quantity, String expiryDate) {
+    public PantryItem(String name, String quantity, String expiryDate, double price) {
         this.name = name;
         this.quantity = quantity;
         this.expiryDate = expiryDate;
+        this.price = price;
     }
 
     // ✅ Getters
@@ -43,7 +49,11 @@ public class PantryItem {
         return expiryDate;
     }
 
-    // ✅ Setters (IMPORTANT for update)
+    public double getPrice() {
+        return price;
+    }
+
+    // ✅ Setters
     public void setId(int id) {
         this.id = id;
     }
@@ -58,5 +68,9 @@ public class PantryItem {
 
     public void setExpiryDate(String expiryDate) {
         this.expiryDate = expiryDate;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

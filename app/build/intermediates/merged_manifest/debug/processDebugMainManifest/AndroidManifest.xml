@@ -59,6 +59,11 @@
             android:name="com.example.pantrypal.MainActivity"
             android:exported="true" />
 
+        <!-- ✅ EDIT PROFILE -->
+        <activity
+            android:name="com.example.pantrypal.ui.profile.EditProfileActivity"
+            android:exported="false" />
+
         <!-- ================= OTHER SCREENS ================= -->
         <activity
             android:name="com.example.pantrypal.AddItemActivity"

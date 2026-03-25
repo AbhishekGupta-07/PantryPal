@@ -36,7 +36,7 @@ public final class PantryDao_Impl implements PantryDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR REPLACE INTO `pantry_items` (`id`,`name`,`quantity`,`expiryDate`) VALUES (nullif(?, 0),?,?,?)";
+        return "INSERT OR REPLACE INTO `pantry_items` (`id`,`name`,`quantity`,`expiryDate`,`price`) VALUES (nullif(?, 0),?,?,?,?)";
       }
 
       @Override
@@ -58,6 +58,7 @@ public final class PantryDao_Impl implements PantryDao {
         } else {
           statement.bindString(4, entity.getExpiryDate());
         }
+        statement.bindDouble(5, entity.getPrice());
       }
     };
     this.__deletionAdapterOfPantryItem = new EntityDeletionOrUpdateAdapter<PantryItem>(__db) {
@@ -77,7 +78,7 @@ public final class PantryDao_Impl implements PantryDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "UPDATE OR ABORT `pantry_items` SET `id` = ?,`name` = ?,`quantity` = ?,`expiryDate` = ? WHERE `id` = ?";
+        return "UPDATE OR ABORT `pantry_items` SET `id` = ?,`name` = ?,`quantity` = ?,`expiryDate` = ?,`price` = ? WHERE `id` = ?";
       }
 
       @Override
@@ -99,7 +100,8 @@ public final class PantryDao_Impl implements PantryDao {
         } else {
           statement.bindString(4, entity.getExpiryDate());
         }
-        statement.bindLong(5, entity.getId());
+        statement.bindDouble(5, entity.getPrice());
+        statement.bindLong(6, entity.getId());
       }
     };
     this.__preparedStmtOfDeleteAll = new SharedSQLiteStatement(__db) {
@@ -176,6 +178,7 @@ public final class PantryDao_Impl implements PantryDao {
       final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
       final int _cursorIndexOfQuantity = CursorUtil.getColumnIndexOrThrow(_cursor, "quantity");
       final int _cursorIndexOfExpiryDate = CursorUtil.getColumnIndexOrThrow(_cursor, "expiryDate");
+      final int _cursorIndexOfPrice = CursorUtil.getColumnIndexOrThrow(_cursor, "price");
       final List<PantryItem> _result = new ArrayList<PantryItem>(_cursor.getCount());
       while (_cursor.moveToNext()) {
         final PantryItem _item;
@@ -204,6 +207,9 @@ public final class PantryDao_Impl implements PantryDao {
           _tmpExpiryDate = _cursor.getString(_cursorIndexOfExpiryDate);
         }
         _item.setExpiryDate(_tmpExpiryDate);
+        final double _tmpPrice;
+        _tmpPrice = _cursor.getDouble(_cursorIndexOfPrice);
+        _item.setPrice(_tmpPrice);
         _result.add(_item);
       }
       return _result;
