@@ -4,24 +4,49 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText android:id="@+id/etItemName"
+    <EditText
+        android:id="@+id/etItemName"
         android:hint="Item Name"
+        android:inputType="textCapWords"
+        android:minHeight="48dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp" />
 
-    <EditText android:id="@+id/etQuantity"
+    <EditText
+        android:id="@+id/etQuantity"
         android:hint="Quantity"
+        android:inputType="text"
+        android:minHeight="48dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp" />
 
-    <EditText android:id="@+id/etExpiry"
-        android:hint="Expiry Date"
+    <EditText
+        android:id="@+id/etPrice"
+        android:hint="Price (₹ optional)"
+        android:inputType="numberDecimal"
+        android:minHeight="48dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp" />
+
+    <EditText
+        android:id="@+id/etExpiry"
+        android:hint="Expiry Date"
+        android:focusable="false"
+        android:clickable="true"
+        android:inputType="none"
+        android:minHeight="48dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp" />
 
     <Button
         android:id="@+id/btnSaveItem"
         android:text="Save Item"
+        android:minHeight="48dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

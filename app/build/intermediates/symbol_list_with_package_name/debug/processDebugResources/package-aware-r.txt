@@ -29,6 +29,7 @@ anim design_snackbar_in
 anim design_snackbar_out
 anim fragment_fast_out_extra_slow_in
 anim item_fade_slide
+anim layout_fall_down
 anim linear_indeterminate_line1_head_interpolator
 anim linear_indeterminate_line1_tail_interpolator
 anim linear_indeterminate_line2_head_interpolator
@@ -3277,6 +3278,7 @@ id action_menu_presenter
 id action_mode_bar
 id action_mode_bar_stub
 id action_mode_close_button
+id action_recipes_to_saved
 id action_text
 id actions
 id activity_chooser_view_content
@@ -3319,8 +3321,8 @@ id browser_actions_menu_item_icon
 id browser_actions_menu_item_text
 id browser_actions_menu_items
 id browser_actions_menu_view
+id btnAdd
 id btnAddItem
-id btnAskAI
 id btnDelete
 id btnEdit
 id btnFilter
@@ -3334,7 +3336,6 @@ id btnSaveItem
 id btnSaveProfile
 id btnSaveRecipe
 id btnShareRecipe
-id btnShopping
 id btnViewSavedRecipes
 id btnWatchVideo
 id buttonPanel
@@ -3342,7 +3343,6 @@ id cache_measures
 id callMeasure
 id cancel_button
 id cardsRow1
-id cardsRow2
 id carryVelocity
 id cbDone
 id center
@@ -3417,6 +3417,7 @@ id edge
 id edit_query
 id elastic
 id embed
+id emptyLayout
 id emptyView
 id end
 id endToStart
@@ -3427,9 +3428,11 @@ id etEditName
 id etEditQty
 id etEmail
 id etExpiry
+id etItem
 id etItemName
 id etMood
 id etPassword
+id etPrice
 id etQuantity
 id exitUntilCollapsed
 id expand_activities_button
@@ -3575,6 +3578,7 @@ id nav_host_fragment_container
 id nav_pantry
 id nav_profile
 id nav_recipes
+id nav_saved_recipes
 id nav_shopping
 id navigation_bar_item_active_indicator_view
 id navigation_bar_item_icon_container
@@ -3640,6 +3644,8 @@ id rb3
 id rb5
 id rb7
 id rectangles
+id recyclerSaved
+id recyclerShopping
 id report_drawn
 id reverseSawtooth
 id rgDays
@@ -3775,20 +3781,20 @@ id triangle
 id tvAppVersion
 id tvContent
 id tvDishName
+id tvEmpty
 id tvEmptySubtitle
 id tvEmptyTitle
 id tvExpiredValue
 id tvExpiry
 id tvExpiryStatus
 id tvExpiryValue
-id tvFooter
 id tvGreeting
 id tvItem
 id tvItemName
 id tvName
 id tvPantryTitle
+id tvPrice
 id tvQuantity
-id tvQuickActions
 id tvRecipeContent
 id tvRecipeResult
 id tvRecipeTitle
@@ -3981,6 +3987,7 @@ layout fragment_pantry
 layout fragment_placeholder
 layout fragment_profile
 layout fragment_recipes
+layout fragment_saved_recipes
 layout fragment_shopping
 layout item_pantry
 layout item_saved_recipe
@@ -4152,6 +4159,8 @@ string empty_subtitle
 string empty_title
 string error_a11y_label
 string error_icon_content_description
+string expired
+string expiring_soon
 string expiry_reminder
 string exposed_dropdown_menu_content_description
 string fab_transformation_scrim_behavior
@@ -4290,10 +4299,12 @@ string path_password_eye
 string path_password_eye_mask_strike_through
 string path_password_eye_mask_visible
 string path_password_strike_through
+string profile
 string profile_guest_mode
 string profile_name_default
 string project_id
 string recipe_details
+string safe_items
 string save
 string saved_recipes_title
 string search_menu_title
@@ -4311,6 +4322,7 @@ string status_expiring_soon
 string status_safe
 string tap_to_add_items
 string title_pantry
+string total_value
 style AlertDialog_AppCompat
 style AlertDialog_AppCompat_Light
 style Animation_AppCompat_Dialog

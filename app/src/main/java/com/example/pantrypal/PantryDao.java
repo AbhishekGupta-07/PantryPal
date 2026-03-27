@@ -12,7 +12,7 @@ import java.util.List;
 @Dao
 public interface PantryDao {
 
-    // 🔹 Insert item (replace if conflict)
+    // 🔹 Insert item
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertItem(PantryItem item);
 
@@ -24,7 +24,7 @@ public interface PantryDao {
     @Delete
     void deleteItem(PantryItem item);
 
-    // 🔹 Get all items (latest first)
+    // 🔹 Get all items
     @Query("SELECT * FROM pantry_items ORDER BY id DESC")
     List<PantryItem> getAllItems();
 
@@ -36,7 +36,11 @@ public interface PantryDao {
     @Query("SELECT COUNT(*) FROM pantry_items WHERE expiryDate IS NOT NULL AND expiryDate != ''")
     int countHasExpiry();
 
-    // 🔴 Clear all pantry data (Profile → Clear Pantry Data)
+    // 🔴 Clear all pantry data
     @Query("DELETE FROM pantry_items")
     void deleteAll();
+
+    // 🔥 TOTAL PANTRY VALUE (BEST VERSION)
+    @Query("SELECT COALESCE(SUM(price), 0) FROM pantry_items")
+    double getTotalValue();
 }

@@ -2,116 +2,99 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#121212">
+    android:background="@android:color/white"
+    android:fillViewport="true">
 
     <LinearLayout
         android:orientation="vertical"
-        android:padding="24dp"
+        android:padding="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- Title -->
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/ai_recipe_title"
             android:textSize="22sp"
-            android:textColor="@android:color/white"
             android:textStyle="bold"
-            android:layout_marginBottom="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="16dp"/>
 
-        <!-- Mood Input -->
         <EditText
             android:id="@+id/etMood"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:hint="@string/ai_recipe_hint"
-            android:inputType="text"
             android:minHeight="48dp"
             android:padding="12dp"
-            android:textColor="@android:color/white"
-            android:textColorHint="#AAAAAA"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:textColor="@android:color/black"
+            android:textColorHint="#888888"/>
 
-        <!-- Get Recipe Button -->
         <Button
             android:id="@+id/btnGetRecipe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/ai_get_recipe"
-            android:layout_marginTop="20dp"
-            android:minHeight="48dp"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_marginTop="16dp"/>
 
-        <!-- ⏳ Loading -->
         <ProgressBar
             android:id="@+id/progressBar"
-            android:layout_marginTop="16dp"
-            android:layout_gravity="center"
-            android:visibility="gone"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"/>
 
-        <!-- Dish Name -->
         <TextView
             android:id="@+id/tvDishName"
-            android:layout_marginTop="24dp"
-            android:textColor="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:textColor="@android:color/black"
+            android:layout_marginTop="20dp"
+            android:visibility="gone"/>
 
-        <!-- Recipe Result -->
         <TextView
             android:id="@+id/tvRecipeResult"
-            android:layout_marginTop="12dp"
-            android:textColor="@android:color/white"
-            android:textSize="15sp"
-            android:lineSpacingExtra="6dp"
-            android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textColor="@android:color/black"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"/>
 
-        <!-- ▶ Watch Video -->
         <Button
             android:id="@+id/btnWatchVideo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="▶ Watch Recipe Video"
-            android:layout_marginTop="16dp"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_marginTop="14dp"
+            android:visibility="gone"/>
 
-        <!-- 📤 Share Recipe -->
         <Button
             android:id="@+id/btnShareRecipe"
-            android:text="📤 Share Recipe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/share_recipe"
             android:layout_marginTop="10dp"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:visibility="gone"/>
 
-        <!-- ❤️ Save Recipe -->
         <Button
             android:id="@+id/btnSaveRecipe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="❤️ Save Recipe"
             android:layout_marginTop="10dp"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:visibility="gone"/>
 
-        <!-- 📂 View Saved Recipes (NEW – IMPORTANT) -->
         <Button
             android:id="@+id/btnViewSavedRecipes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="📂 View Saved Recipes"
             android:layout_marginTop="10dp"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:visibility="gone"/>
 
     </LinearLayout>
 </ScrollView>

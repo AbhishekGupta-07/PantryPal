@@ -1,6 +1,7 @@
 R_DEF: Internal format may change without notice
 local
 anim item_fade_slide
+anim layout_fall_down
 color black
 color ic_launcher_background
 color pp_bg
@@ -33,9 +34,10 @@ drawable pantrypal_logo
 id action_delete
 id action_edit
 id action_filter
+id action_recipes_to_saved
 id bottomNav
+id btnAdd
 id btnAddItem
-id btnAskAI
 id btnDelete
 id btnEdit
 id btnFilter
@@ -49,21 +51,22 @@ id btnSaveItem
 id btnSaveProfile
 id btnSaveRecipe
 id btnShareRecipe
-id btnShopping
 id btnViewSavedRecipes
 id btnWatchVideo
 id cardsRow1
-id cardsRow2
 id cbDone
+id emptyLayout
 id emptyView
 id etEditExpiry
 id etEditName
 id etEditQty
 id etEmail
 id etExpiry
+id etItem
 id etItemName
 id etMood
 id etPassword
+id etPrice
 id etQuantity
 id filter_all
 id filter_expired
@@ -82,6 +85,7 @@ id nav_home
 id nav_pantry
 id nav_profile
 id nav_recipes
+id nav_saved_recipes
 id nav_shopping
 id pantryRecycler
 id progressBar
@@ -89,6 +93,8 @@ id rb1
 id rb3
 id rb5
 id rb7
+id recyclerSaved
+id recyclerShopping
 id rgDays
 id rowAbout
 id rowClearPantry
@@ -106,20 +112,20 @@ id toolbar
 id tvAppVersion
 id tvContent
 id tvDishName
+id tvEmpty
 id tvEmptySubtitle
 id tvEmptyTitle
 id tvExpiredValue
 id tvExpiry
 id tvExpiryStatus
 id tvExpiryValue
-id tvFooter
 id tvGreeting
 id tvItem
 id tvItemName
 id tvName
 id tvPantryTitle
+id tvPrice
 id tvQuantity
-id tvQuickActions
 id tvRecipeContent
 id tvRecipeResult
 id tvRecipeTitle
@@ -153,6 +159,7 @@ layout fragment_pantry
 layout fragment_placeholder
 layout fragment_profile
 layout fragment_recipes
+layout fragment_saved_recipes
 layout fragment_shopping
 layout item_pantry
 layout item_saved_recipe
@@ -198,6 +205,8 @@ string empty_image_desc
 string empty_label
 string empty_subtitle
 string empty_title
+string expired
+string expiring_soon
 string expiry_reminder
 string filter
 string filter_all
@@ -220,10 +229,12 @@ string no_saved_recipes_sub
 string no_shopping_items
 string notifications
 string ok
+string profile
 string profile_guest_mode
 string profile_name_default
 string project_id
 string recipe_details
+string safe_items
 string save
 string saved_recipes_title
 string share_recipe
@@ -234,6 +245,7 @@ string status_expiring_soon
 string status_safe
 string tap_to_add_items
 string title_pantry
+string total_value
 style Base.Theme.PantryPal
 style PP_PrimaryButton
 style ProfileDivider

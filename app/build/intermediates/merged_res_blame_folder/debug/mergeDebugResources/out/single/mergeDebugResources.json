@@ -44,6 +44,14 @@
         "source": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-main-7:\\drawable\\ic_home.xml"
     },
     {
+        "merged": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-debug-5:\\layout_activity_edit_profile.xml.flat",
+        "source": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-main-7:\\layout\\activity_edit_profile.xml"
+    },
+    {
+        "merged": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-debug-5:\\layout_fragment_saved_recipes.xml.flat",
+        "source": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-main-7:\\layout\\fragment_saved_recipes.xml"
+    },
+    {
         "merged": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-debug-5:\\drawable_pantrypal_logo.png.flat",
         "source": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-main-7:\\drawable\\pantrypal_logo.png"
     },
@@ -76,8 +84,8 @@
         "source": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-main-7:\\drawable\\ic_delete_24.xml"
     },
     {
-        "merged": "com.example.pantrypal.app-debug-5:/layout_activity_edit_profile.xml.flat",
-        "source": "com.example.pantrypal.app-main-7:/layout/activity_edit_profile.xml"
+        "merged": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-debug-5:\\anim_layout_fall_down.xml.flat",
+        "source": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-main-7:\\anim\\layout_fall_down.xml"
     },
     {
         "merged": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-debug-5:\\mipmap-xxhdpi_ic_launcher_round.webp.flat",
@@ -246,6 +254,10 @@
     {
         "merged": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-debug-5:\\layout_item_saved_recipe.xml.flat",
         "source": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-main-7:\\layout\\item_saved_recipe.xml"
+    },
+    {
+        "merged": "com.example.pantrypal.app-debug-5:/layout_fragment_shopping.xml.flat",
+        "source": "com.example.pantrypal.app-main-7:/layout/fragment_shopping.xml"
     },
     {
         "merged": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-debug-5:\\layout_item_shopping.xml.flat",

@@ -42,6 +42,8 @@
     <string name="empty_label">Empty</string>
     <string name="empty_subtitle">Start by adding items to your pantry</string>
     <string name="empty_title">No Pantry Items</string>
+    <string name="expired">Expired</string>
+    <string name="expiring_soon">Expiring Soon</string>
     <string name="expiry_reminder">Expiry Reminder</string>
     <string name="filter">Filter</string>
     <string name="filter_all">All</string>
@@ -64,13 +66,15 @@
     <string name="no_shopping_items">No items in shopping list</string>
     <string name="notifications">Notifications</string>
     <string name="ok">OK</string>
+    <string name="profile">Profile</string>
     <string name="profile_guest_mode">Guest Mode</string>
     <string name="profile_name_default">Abhishek Gupta</string>
     <string name="project_id" translatable="false">pantrypal-4d3de</string>
     <string name="recipe_details">Recipe Details</string>
+    <string name="safe_items">Safe</string>
     <string name="save">Save</string>
     <string name="saved_recipes_title">Saved Recipes</string>
-    <string name="share_recipe">📤 Share Recipe</string>
+    <string name="share_recipe">Share Recipe</string>
     <string name="shopping_hint">Enter item</string>
     <string name="shopping_list_title">Shopping List</string>
     <string name="status_expired">Expired</string>
@@ -78,6 +82,7 @@
     <string name="status_safe">Safe</string>
     <string name="tap_to_add_items">Tap + to add items</string>
     <string name="title_pantry">Your Pantry</string>
+    <string name="total_value">Total Value</string>
     <style name="PP_PrimaryButton" parent="Widget.MaterialComponents.Button">
         <item name="android:insetLeft">0dp</item>
         <item name="android:insetRight">0dp</item>

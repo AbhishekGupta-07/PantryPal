@@ -16,10 +16,16 @@ public class ShoppingItem {
     public ShoppingItem() {
     }
 
-    // ✅ Custom constructor
+    // ✅ Constructor 1 (default false)
     public ShoppingItem(String itemName) {
         this.itemName = itemName;
         this.isPurchased = false;
+    }
+
+    // 🔥 NEW (fix for your fragment)
+    public ShoppingItem(String itemName, boolean isPurchased) {
+        this.itemName = itemName;
+        this.isPurchased = isPurchased;
     }
 
     // ----------------------

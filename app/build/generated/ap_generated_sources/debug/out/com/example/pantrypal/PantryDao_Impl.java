@@ -259,6 +259,26 @@ public final class PantryDao_Impl implements PantryDao {
     }
   }
 
+  @Override
+  public double getTotalValue() {
+    final String _sql = "SELECT COALESCE(SUM(price), 0) FROM pantry_items";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
+    __db.assertNotSuspendingTransaction();
+    final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+    try {
+      final double _result;
+      if (_cursor.moveToFirst()) {
+        _result = _cursor.getDouble(0);
+      } else {
+        _result = 0.0;
+      }
+      return _result;
+    } finally {
+      _cursor.close();
+      _statement.release();
+    }
+  }
+
   @NonNull
   public static List<Class<?>> getRequiredConverters() {
     return Collections.emptyList();

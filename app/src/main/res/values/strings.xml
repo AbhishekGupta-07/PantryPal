@@ -9,7 +9,7 @@
     <!-- Pantry -->
     <string name="title_pantry">Your Pantry</string>
 
-    <!-- Empty State (Pantry) -->
+    <!-- Empty State -->
     <string name="empty_title">No Pantry Items</string>
     <string name="empty_subtitle">Start by adding items to your pantry</string>
     <string name="empty_image_desc">Empty pantry illustration</string>
@@ -21,36 +21,43 @@
     <string name="filter_expiring_soon">Expiring Soon</string>
     <string name="filter_safe">Safe</string>
 
-    <!-- Pantry Item Labels -->
+    <!-- Labels -->
     <string name="label_expiry">Expiry:</string>
 
-    <!-- Status Text -->
+    <!-- Status -->
     <string name="status_safe">Safe</string>
     <string name="status_expired">Expired</string>
     <string name="status_expiring_soon">Expiring Soon</string>
 
-    <!-- Menu / Accessibility -->
-    <string name="more_options">More options</string>
+    <!-- 🔥 DASHBOARD (IMPORTANT) -->
+    <string name="total_value">Total Value</string>
+    <string name="expiring_soon">Expiring Soon</string>
+    <string name="expired">Expired</string>
+    <string name="safe_items">Safe</string>
 
-    <!-- 🤖 AI Recipe Suggestions -->
+    <!-- Accessibility -->
+    <string name="more_options">More options</string>
+    <string name="profile">Profile</string>
+
+    <!-- 🤖 AI -->
     <string name="ai_recipe_title">AI Recipe Suggestions</string>
     <string name="ai_recipe_hint">How are you feeling?</string>
     <string name="ai_get_recipe">Get Recipe</string>
     <string name="ai_enter_mood">Please enter your mood</string>
     <string name="ai_result_prefix">AI will suggest recipes based on mood:</string>
 
-    <!-- ❤️ Saved Recipes -->
+    <!-- ❤️ Saved -->
     <string name="saved_recipes_title">Saved Recipes</string>
     <string name="no_saved_recipes">No Saved Recipes</string>
     <string name="no_saved_recipes_sub">Save recipes to see them here</string>
 
-    <!-- 📖 Recipe Detail -->
+    <!-- 📖 Recipe -->
     <string name="recipe_details">Recipe Details</string>
-    <string name="share_recipe">📤 Share Recipe</string>
+    <string name="share_recipe">Share Recipe</string>
     <string name="delete_recipe">Delete Recipe</string>
     <string name="delete_recipe_confirm">Are you sure you want to delete this recipe?</string>
 
-    <!-- 🛒 Shopping List -->
+    <!-- 🛒 Shopping -->
     <string name="shopping_list_title">Shopping List</string>
     <string name="shopping_hint">Enter item</string>
     <string name="add_item">Add Item</string>
@@ -59,11 +66,11 @@
     <string name="mark_item_done">Mark item as purchased</string>
     <string name="no_shopping_items">No items in shopping list</string>
 
-    <!-- Shopping Screen Helper -->
+    <!-- Helper -->
     <string name="empty_label">Empty</string>
     <string name="tap_to_add_items">Tap + to add items</string>
 
-    <!-- 👤 Profile (Professional Utility Version) -->
+    <!-- 👤 Profile -->
     <string name="profile_name_default">Abhishek Gupta</string>
     <string name="profile_guest_mode">Guest Mode</string>
     <string name="edit_profile">Edit Profile</string>
@@ -89,10 +96,10 @@
 
     <string name="avatar">Avatar</string>
 
-    <!-- ✅ MISSING KEY FIX (THIS IS REQUIRED) -->
+    <!-- Logout -->
     <string name="logout">Logout</string>
 
-    <!-- Dialog text (Professional) -->
+    <!-- Dialog -->
     <string name="clear_pantry_title">Clear Pantry Data</string>
     <string name="clear_pantry_msg">Are you sure?\nThis will permanently delete all pantry items.</string>
     <string name="cancel">Cancel</string>

@@ -49,12 +49,13 @@ public class SavedRecipeAdapter
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
         SavedRecipe recipe = list.get(position);
 
         holder.tvTitle.setText(recipe.title);
         holder.tvContent.setText(recipe.content);
 
-        // ✅ OPEN FULL RECIPE DETAIL
+        // 🔥 OPEN DETAIL SCREEN
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, RecipeDetailActivity.class);
             intent.putExtra("title", recipe.title);
@@ -62,8 +63,9 @@ public class SavedRecipeAdapter
             context.startActivity(intent);
         });
 
-        // 🗑 DELETE RECIPE (SAFE WAY)
+        // 🗑 DELETE (THREAD SAFE)
         holder.btnDelete.setOnClickListener(v -> {
+
             int pos = holder.getAdapterPosition();
             if (pos == RecyclerView.NO_POSITION) return;
 
@@ -71,10 +73,20 @@ public class SavedRecipeAdapter
                     .setTitle("Delete Recipe")
                     .setMessage("Are you sure you want to delete this recipe?")
                     .setPositiveButton("Delete", (d, w) -> {
-                        dao.delete(list.get(pos));   // DB delete
-                        list.remove(pos);            // UI delete
-                        notifyItemRemoved(pos);
-                        notifyItemRangeChanged(pos, list.size());
+
+                        // 🔥 BACKGROUND DELETE (IMPORTANT)
+                        new Thread(() -> {
+
+                            dao.delete(list.get(pos));
+
+                            ((android.app.Activity) context).runOnUiThread(() -> {
+                                list.remove(pos);
+                                notifyItemRemoved(pos);
+                                notifyItemRangeChanged(pos, list.size());
+                            });
+
+                        }).start();
+
                     })
                     .setNegativeButton("Cancel", null)
                     .show();

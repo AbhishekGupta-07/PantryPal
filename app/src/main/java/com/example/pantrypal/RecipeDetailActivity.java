@@ -10,50 +10,64 @@ import androidx.appcompat.widget.Toolbar;
 
 public class RecipeDetailActivity extends AppCompatActivity {
 
+    private TextView tvTitle, tvContent;
+    private Button btnShare;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
 
-        // 🔹 Toolbar setup (Back button)
+        // 🔹 Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(getString(R.string.recipe_details));
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        TextView tvTitle = findViewById(R.id.tvRecipeTitle);
-        TextView tvContent = findViewById(R.id.tvRecipeContent);
-        Button btnShare = findViewById(R.id.btnShareRecipe);
+        // 🔹 Bind Views
+        tvTitle = findViewById(R.id.tvRecipeTitle);
+        tvContent = findViewById(R.id.tvRecipeContent);
+        btnShare = findViewById(R.id.btnShareRecipe);
 
-        // 🔹 Data received from Intent
+        // 🔹 Get Data (SAFE)
         String title = getIntent().getStringExtra("title");
         String content = getIntent().getStringExtra("content");
 
-        // 🔹 Safe handling
-        tvTitle.setText(title != null ? title : getString(R.string.recipe_details));
-        tvContent.setText(content != null ? content : "No recipe details available");
+        if (title == null || title.isEmpty()) {
+            title = getString(R.string.recipe_details);
+        }
 
-        // 📤 SHARE RECIPE
-        btnShare.setOnClickListener(v -> {
-            Intent shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.setType("text/plain");
+        if (content == null || content.isEmpty()) {
+            content = "No recipe details available";
+        }
 
-            String shareText =
-                    "🍽️ " + tvTitle.getText().toString() + "\n\n" +
-                            tvContent.getText().toString() + "\n\n" +
-                            "Shared via PantryPal ❤️";
+        tvTitle.setText(title);
+        tvContent.setText(content);
 
-            shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
-            startActivity(Intent.createChooser(shareIntent, "Share Recipe via"));
-        });
+        // 📤 SHARE
+        btnShare.setOnClickListener(v -> shareRecipe());
     }
 
-    // 🔙 Back button support
+    private void shareRecipe() {
+        String shareText =
+                "🍽 " + tvTitle.getText().toString() + "\n\n" +
+                        tvContent.getText().toString() + "\n\n" +
+                        "Shared via PantryPal ❤️";
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, shareText);
+
+        startActivity(Intent.createChooser(intent, "Share Recipe"));
+    }
+
+    // 🔙 BACK BUTTON
     @Override
     public boolean onSupportNavigateUp() {
-        finish();
+        onBackPressed();
         return true;
     }
 }
