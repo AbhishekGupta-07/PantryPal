@@ -49,7 +49,8 @@
         <activity android:name=".RecipeSuggestionActivity" android:exported="false" />
         <activity android:name=".SavedRecipesActivity" android:exported="false" />
         <activity android:name=".RecipeDetailActivity" android:exported="false" />
-        <activity android:name=".ShoppingListActivity" android:exported="false" />
+
+        <!-- ❌ ShoppingListActivity REMOVED -->
 
     </application>
 

@@ -3323,12 +3323,16 @@ id browser_actions_menu_items
 id browser_actions_menu_view
 id btnAdd
 id btnAddItem
+id btnAll
 id btnDelete
+id btnDeleteAll
+id btnDone
 id btnEdit
 id btnFilter
 id btnGetRecipe
 id btnGoogle
 id btnLogin
+id btnPending
 id btnPickPhoto
 id btnProfile
 id btnSaveDays
@@ -3442,6 +3446,7 @@ id fill
 id fill_horizontal
 id fill_vertical
 id filled
+id filterLayout
 id filter_all
 id filter_expired
 id filter_expiring_soon
@@ -3663,7 +3668,6 @@ id row_index_key
 id rtl
 id rvPantry
 id rvSavedRecipes
-id rvShopping
 id save_non_transition_alpha
 id save_overlay_view
 id sawtooth
@@ -3780,6 +3784,7 @@ id transition_transform
 id triangle
 id tvAppVersion
 id tvContent
+id tvCount
 id tvDishName
 id tvEmpty
 id tvEmptySubtitle
@@ -4093,7 +4098,7 @@ string abc_shareactionprovider_share_with_application
 string abc_toolbar_collapse_description
 string about_pantry_pal
 string account
-string add_item
+string add
 string ai_enter_mood
 string ai_get_recipe
 string ai_recipe_hint
@@ -4141,12 +4146,14 @@ string common_open_on_phone
 string common_signin_button_text
 string common_signin_button_text_long
 string copy_toast_msg
+string count_default
 string dark_mode
 string data_management
 string days_before_3
 string days_before_format
 string default_web_client_id
 string delete
+string delete_all
 string delete_item
 string delete_item_confirm
 string delete_recipe
@@ -4157,6 +4164,7 @@ string empty_image_desc
 string empty_label
 string empty_subtitle
 string empty_title
+string enter_item
 string error_a11y_label
 string error_icon_content_description
 string expired
@@ -4170,8 +4178,10 @@ string fallback_menu_item_open_in_browser
 string fallback_menu_item_share_link
 string filter
 string filter_all
+string filter_done
 string filter_expired
 string filter_expiring_soon
+string filter_pending
 string filter_safe
 string gcm_defaultSenderId
 string google_api_key
@@ -4312,8 +4322,7 @@ string searchbar_scrolling_view_behavior
 string searchview_clear_text_content_description
 string searchview_navigation_content_description
 string share_recipe
-string shopping_hint
-string shopping_list_title
+string shopping_title
 string side_sheet_accessibility_pane_title
 string side_sheet_behavior
 string status_bar_notification_info_overflow

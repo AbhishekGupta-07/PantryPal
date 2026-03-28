@@ -5,11 +5,16 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar; // 🔥 IMPORTANT
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,50 +23,105 @@ public class ShoppingListActivity extends AppCompatActivity {
 
     private RecyclerView rvShopping;
     private View layoutEmpty;
-    private ImageButton btnAddItem;
+    private ImageButton btnAddItem, btnDeleteAll;
+    private TextView tvCount;
 
     private ShoppingDao dao;
     private final List<ShoppingItem> list = new ArrayList<>();
     private ShoppingAdapter adapter;
+
+    private String filter = "ALL";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_list);
 
-        rvShopping = findViewById(R.id.rvShopping);
+        rvShopping = findViewById(R.id.recyclerShopping);
         layoutEmpty = findViewById(R.id.layoutEmpty);
         btnAddItem = findViewById(R.id.btnAddItem);
+        btnDeleteAll = findViewById(R.id.btnDeleteAll);
+        tvCount = findViewById(R.id.tvCount);
 
         dao = PantryDatabase.getInstance(this).shoppingDao();
 
-        adapter = new ShoppingAdapter(this, list, dao, new ShoppingAdapter.OnListChangedListener() {
-            @Override
-            public void onListChanged() {
-                refreshList();
-            }
-        });
+        adapter = new ShoppingAdapter(this, list, dao, this::refreshList);
 
         rvShopping.setLayoutManager(new LinearLayoutManager(this));
         rvShopping.setAdapter(adapter);
 
-        refreshList(); // ✅ load sorted list
+        setupSwipeToDelete();
 
-        btnAddItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAddDialog();
-            }
+        refreshList();
+
+        btnAddItem.setOnClickListener(v -> showAddDialog());
+
+        btnDeleteAll.setOnClickListener(v -> showDeleteAllDialog());
+
+        findViewById(R.id.btnAll).setOnClickListener(v -> {
+            filter = "ALL";
+            refreshList();
+        });
+
+        findViewById(R.id.btnPending).setOnClickListener(v -> {
+            filter = "PENDING";
+            refreshList();
+        });
+
+        findViewById(R.id.btnDone).setOnClickListener(v -> {
+            filter = "DONE";
+            refreshList();
         });
     }
 
+    // 🔥 SWIPE DELETE + UNDO
+    private void setupSwipeToDelete() {
+        ItemTouchHelper.SimpleCallback swipe =
+                new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+
+                    @Override
+                    public boolean onMove(@NonNull RecyclerView rv,
+                                          @NonNull RecyclerView.ViewHolder vh,
+                                          @NonNull RecyclerView.ViewHolder target) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onSwiped(@NonNull RecyclerView.ViewHolder vh, int dir) {
+                        int pos = vh.getAdapterPosition();
+                        ShoppingItem deletedItem = list.get(pos);
+
+                        new Thread(() -> {
+                            dao.delete(deletedItem);
+
+                            runOnUiThread(() -> {
+                                refreshList();
+
+                                // 🔥 SNACKBAR UNDO
+                                Snackbar.make(rvShopping, "Item deleted", Snackbar.LENGTH_LONG)
+                                        .setAction("UNDO", v -> {
+
+                                            new Thread(() -> {
+                                                dao.insert(deletedItem);
+
+                                                runOnUiThread(() -> refreshList());
+                                            }).start();
+
+                                        })
+                                        .show();
+                            });
+
+                        }).start();
+                    }
+                };
+
+        new ItemTouchHelper(swipe).attachToRecyclerView(rvShopping);
+    }
+
+    // ➕ ADD ITEM
     private void showAddDialog() {
         final EditText input = new EditText(this);
         input.setHint("e.g., Milk, Rice, Bread");
-        input.setSingleLine(true);
-
-        int pad = (int) (16 * getResources().getDisplayMetrics().density);
-        input.setPadding(pad, pad, pad, pad);
 
         new AlertDialog.Builder(this)
                 .setTitle("Add item")
@@ -71,17 +131,63 @@ public class ShoppingListActivity extends AppCompatActivity {
                     String name = input.getText().toString().trim();
                     if (TextUtils.isEmpty(name)) return;
 
-                    dao.insert(new ShoppingItem(name));
-                    refreshList(); // ✅ keep sorting after add
+                    new Thread(() -> {
+                        dao.insert(new ShoppingItem(name));
+                        runOnUiThread(this::refreshList);
+                    }).start();
                 })
                 .show();
     }
 
+    // 🗑 DELETE ALL
+    private void showDeleteAllDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Delete All")
+                .setMessage("Are you sure?")
+                .setPositiveButton("Yes", (d, w) -> {
+                    new Thread(() -> {
+                        dao.deleteAll();
+                        runOnUiThread(this::refreshList);
+                    }).start();
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+    // 🔄 REFRESH + FILTER + COUNT
     private void refreshList() {
-        list.clear();
-        list.addAll(dao.getAllItemsSorted()); // ✅ auto sort
-        adapter.notifyDataSetChanged();
-        updateEmptyState();
+        new Thread(() -> {
+
+            List<ShoppingItem> items;
+
+            if (filter.equals("PENDING")) {
+                items = dao.getPendingItems();
+            } else if (filter.equals("DONE")) {
+                items = dao.getCompletedItems();
+            } else {
+                items = dao.getAllItemsSorted();
+            }
+
+            runOnUiThread(() -> {
+                list.clear();
+                list.addAll(items);
+                adapter.notifyDataSetChanged();
+                updateEmptyState();
+                updateCount(items);
+            });
+
+        }).start();
+    }
+
+    // 📊 COUNT
+    private void updateCount(List<ShoppingItem> items) {
+        int done = 0;
+        for (ShoppingItem i : items) {
+            if (i.isPurchased()) done++;
+        }
+        int pending = items.size() - done;
+
+        tvCount.setText(pending + " Pending • " + done + " Done");
     }
 
     private void updateEmptyState() {

@@ -27,4 +27,16 @@ public interface ShoppingDao {
     // ✅ AUTO SORT: Unchecked first, Purchased bottom
     @Query("SELECT * FROM shopping_items ORDER BY isPurchased ASC, id DESC")
     List<ShoppingItem> getAllItemsSorted();
+
+    // 🔥 NEW: Delete all items
+    @Query("DELETE FROM shopping_items")
+    void deleteAll();
+
+    // 🔥 NEW: Only pending (unchecked)
+    @Query("SELECT * FROM shopping_items WHERE isPurchased = 0 ORDER BY id DESC")
+    List<ShoppingItem> getPendingItems();
+
+    // 🔥 NEW: Only completed (checked)
+    @Query("SELECT * FROM shopping_items WHERE isPurchased = 1 ORDER BY id DESC")
+    List<ShoppingItem> getCompletedItems();
 }

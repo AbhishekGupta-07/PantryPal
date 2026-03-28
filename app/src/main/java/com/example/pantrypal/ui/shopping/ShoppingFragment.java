@@ -1,9 +1,11 @@
 package com.example.pantrypal.ui.shopping;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +19,7 @@ import com.example.pantrypal.ShoppingAdapter;
 import com.example.pantrypal.ShoppingDao;
 import com.example.pantrypal.ShoppingItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShoppingFragment extends Fragment {
@@ -24,6 +27,13 @@ public class ShoppingFragment extends Fragment {
     private RecyclerView recyclerView;
     private EditText etItem;
     private Button btnAdd;
+    private TextView tvCount;
+
+    private ShoppingDao dao;
+    private final List<ShoppingItem> list = new ArrayList<>();
+    private ShoppingAdapter adapter;
+
+    private String filter = "ALL";
 
     public ShoppingFragment() {
         super(R.layout.fragment_shopping);
@@ -36,8 +46,16 @@ public class ShoppingFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerShopping);
         etItem = view.findViewById(R.id.etItem);
         btnAdd = view.findViewById(R.id.btnAdd);
+        tvCount = view.findViewById(R.id.tvCount);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        dao = PantryDatabase.getInstance(requireContext()).shoppingDao();
+
+        adapter = new ShoppingAdapter(getContext(), list, dao, this::loadItems);
+        recyclerView.setAdapter(adapter);
+
+        setupFilters(view);
 
         loadItems();
 
@@ -46,47 +64,78 @@ public class ShoppingFragment extends Fragment {
 
             String text = etItem.getText().toString().trim();
 
-            if (text.isEmpty()) {
+            if (TextUtils.isEmpty(text)) {
                 etItem.setError("Enter item");
                 return;
             }
 
             new Thread(() -> {
+                dao.insert(new ShoppingItem(text));
 
-                PantryDatabase db = PantryDatabase.getInstance(requireContext());
-
-                db.shoppingDao().insert(new ShoppingItem(text));
+                if (!isAdded()) return;
 
                 requireActivity().runOnUiThread(() -> {
                     etItem.setText("");
-                    loadItems(); // refresh
+                    loadItems();
                 });
 
             }).start();
         });
     }
 
+    // 🔥 FILTER BUTTONS
+    private void setupFilters(View view) {
+        view.findViewById(R.id.btnAll).setOnClickListener(v -> {
+            filter = "ALL";
+            loadItems();
+        });
+
+        view.findViewById(R.id.btnPending).setOnClickListener(v -> {
+            filter = "PENDING";
+            loadItems();
+        });
+
+        view.findViewById(R.id.btnDone).setOnClickListener(v -> {
+            filter = "DONE";
+            loadItems();
+        });
+    }
+
+    // 🔄 LOAD ITEMS
     private void loadItems() {
 
         new Thread(() -> {
 
-            PantryDatabase db = PantryDatabase.getInstance(requireContext());
-            ShoppingDao dao = db.shoppingDao();
+            List<ShoppingItem> items;
 
-            List<ShoppingItem> list = dao.getAllItems();
+            if (filter.equals("PENDING")) {
+                items = dao.getPendingItems();
+            } else if (filter.equals("DONE")) {
+                items = dao.getCompletedItems();
+            } else {
+                items = dao.getAllItemsSorted();
+            }
+
+            if (!isAdded()) return;
 
             requireActivity().runOnUiThread(() -> {
-
-                ShoppingAdapter adapter = new ShoppingAdapter(
-                        requireContext(),
-                        list,
-                        dao,
-                        this::loadItems // 🔥 auto refresh after delete/update
-                );
-
-                recyclerView.setAdapter(adapter);
+                list.clear();
+                list.addAll(items);
+                adapter.notifyDataSetChanged();
+                updateCount(items);
             });
 
         }).start();
+    }
+
+    // 📊 COUNT
+    private void updateCount(List<ShoppingItem> items) {
+        int done = 0;
+        for (ShoppingItem i : items) {
+            if (i.isPurchased()) done++;
+        }
+        int pending = items.size() - done;
+
+        tvCount.setText(pending + " Pending • " + done + " Done");
     }
 }

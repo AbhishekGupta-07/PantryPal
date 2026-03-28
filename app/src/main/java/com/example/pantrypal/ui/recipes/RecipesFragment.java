@@ -19,7 +19,7 @@ import com.example.pantrypal.SavedRecipe;
 public class RecipesFragment extends Fragment {
 
     public RecipesFragment() {
-        super(R.layout.activity_recipe_suggestion);
+        super(R.layout.activity_recipe_suggestion); // ⚠️ ensure layout correct
     }
 
     @Override
@@ -36,7 +36,6 @@ public class RecipesFragment extends Fragment {
         Button btnSaved = view.findViewById(R.id.btnViewSavedRecipes);
         ProgressBar progressBar = view.findViewById(R.id.progressBar);
 
-        // 🔥 GET RECIPE
         btnGetRecipe.setOnClickListener(v -> {
 
             String mood = etMood.getText().toString().trim();
@@ -49,6 +48,8 @@ public class RecipesFragment extends Fragment {
             progressBar.setVisibility(View.VISIBLE);
 
             new Handler().postDelayed(() -> {
+
+                if (!isAdded()) return;
 
                 progressBar.setVisibility(View.GONE);
 
@@ -63,7 +64,6 @@ public class RecipesFragment extends Fragment {
                 tvDish.setText(dish);
                 tvResult.setText(recipe);
 
-                // 🔥 SHOW UI
                 tvDish.setVisibility(View.VISIBLE);
                 tvResult.setVisibility(View.VISIBLE);
                 btnShare.setVisibility(View.VISIBLE);
@@ -81,7 +81,7 @@ public class RecipesFragment extends Fragment {
             String recipe = tvResult.getText().toString();
 
             if (dish.isEmpty()) {
-                Toast.makeText(requireContext(), "Generate recipe first", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Generate recipe first", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -94,14 +94,14 @@ public class RecipesFragment extends Fragment {
             startActivity(Intent.createChooser(intent, "Share Recipe"));
         });
 
-        // ❤️ SAVE (ROOM DB)
+        // ❤️ SAVE
         btnSave.setOnClickListener(v -> {
 
             String dish = tvDish.getText().toString();
             String recipe = tvResult.getText().toString();
 
             if (dish.isEmpty()) {
-                Toast.makeText(requireContext(), "Generate recipe first", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Generate recipe first", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -109,12 +109,16 @@ public class RecipesFragment extends Fragment {
 
             new Thread(() -> {
 
-                PantryDatabase.getInstance(requireContext())
+                if (getContext() == null) return;
+
+                PantryDatabase.getInstance(getContext())
                         .savedRecipeDao()
                         .insert(savedRecipe);
 
+                if (!isAdded()) return;
+
                 requireActivity().runOnUiThread(() ->
-                        Toast.makeText(requireContext(), "Saved Successfully ❤️", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(getContext(), "Saved Successfully ❤️", Toast.LENGTH_SHORT).show()
                 );
 
             }).start();
@@ -126,7 +130,7 @@ public class RecipesFragment extends Fragment {
             String dish = tvDish.getText().toString();
 
             if (dish.isEmpty()) {
-                Toast.makeText(requireContext(), "Generate recipe first", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Generate recipe first", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -138,11 +142,15 @@ public class RecipesFragment extends Fragment {
             startActivity(intent);
         });
 
-        // 📂 VIEW SAVED (🔥 FIXED NAVIGATION)
+        // 📂 VIEW SAVED
         btnSaved.setOnClickListener(v -> {
 
-            NavHostFragment.findNavController(this)
-                    .navigate(R.id.action_recipes_to_saved);
+            try {
+                NavHostFragment.findNavController(this)
+                        .navigate(R.id.action_recipes_to_saved);
+            } catch (Exception e) {
+                Toast.makeText(getContext(), "Navigation error", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 }

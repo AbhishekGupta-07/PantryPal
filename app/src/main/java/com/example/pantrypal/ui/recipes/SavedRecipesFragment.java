@@ -20,6 +20,9 @@ import java.util.List;
 
 public class SavedRecipesFragment extends Fragment {
 
+    private RecyclerView recyclerView;
+    private LinearLayout emptyLayout;
+
     public SavedRecipesFragment() {
         super(R.layout.fragment_saved_recipes);
     }
@@ -28,28 +31,35 @@ public class SavedRecipesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerSaved);
-        LinearLayout emptyLayout = view.findViewById(R.id.emptyLayout); // 🔥 FIXED
+        recyclerView = view.findViewById(R.id.recyclerSaved);
+        emptyLayout = view.findViewById(R.id.emptyLayout);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        loadData(recyclerView, emptyLayout);
+        loadData();
     }
 
-    private void loadData(RecyclerView recyclerView, LinearLayout emptyLayout) {
+    private void loadData() {
 
         new Thread(() -> {
 
+            // 🔥 SAFE context
+            if (getContext() == null) return;
+
             List<SavedRecipe> list =
-                    PantryDatabase.getInstance(requireContext())
+                    PantryDatabase.getInstance(getContext())
                             .savedRecipeDao()
                             .getAllSavedRecipes();
 
+            // 🔥 CHECK fragment attached
+            if (!isAdded()) return;
+
             requireActivity().runOnUiThread(() -> {
+
+                if (!isAdded()) return;
 
                 if (list == null || list.isEmpty()) {
 
-                    // 🔴 EMPTY STATE
                     recyclerView.setVisibility(View.GONE);
                     emptyLayout.setVisibility(View.VISIBLE);
 
@@ -59,14 +69,13 @@ public class SavedRecipesFragment extends Fragment {
                     recyclerView.setVisibility(View.VISIBLE);
 
                     SavedRecipeAdapter adapter =
-                            new SavedRecipeAdapter(requireContext(), list);
+                            new SavedRecipeAdapter(getContext(), list);
 
                     recyclerView.setAdapter(adapter);
 
-                    // 🔥 ANIMATION (clean)
                     recyclerView.setLayoutAnimation(
                             AnimationUtils.loadLayoutAnimation(
-                                    requireContext(),
+                                    getContext(),
                                     R.anim.layout_fall_down
                             )
                     );

@@ -6,6 +6,7 @@ import androidx.room.EntityDeletionOrUpdateAdapter;
 import androidx.room.EntityInsertionAdapter;
 import androidx.room.RoomDatabase;
 import androidx.room.RoomSQLiteQuery;
+import androidx.room.SharedSQLiteStatement;
 import androidx.room.util.CursorUtil;
 import androidx.room.util.DBUtil;
 import androidx.sqlite.db.SupportSQLiteStatement;
@@ -26,6 +27,8 @@ public final class ShoppingDao_Impl implements ShoppingDao {
   private final EntityDeletionOrUpdateAdapter<ShoppingItem> __deletionAdapterOfShoppingItem;
 
   private final EntityDeletionOrUpdateAdapter<ShoppingItem> __updateAdapterOfShoppingItem;
+
+  private final SharedSQLiteStatement __preparedStmtOfDeleteAll;
 
   public ShoppingDao_Impl(@NonNull final RoomDatabase __db) {
     this.__db = __db;
@@ -83,6 +86,14 @@ public final class ShoppingDao_Impl implements ShoppingDao {
         statement.bindLong(4, entity.getId());
       }
     };
+    this.__preparedStmtOfDeleteAll = new SharedSQLiteStatement(__db) {
+      @Override
+      @NonNull
+      public String createQuery() {
+        final String _query = "DELETE FROM shopping_items";
+        return _query;
+      }
+    };
   }
 
   @Override
@@ -118,6 +129,23 @@ public final class ShoppingDao_Impl implements ShoppingDao {
       __db.setTransactionSuccessful();
     } finally {
       __db.endTransaction();
+    }
+  }
+
+  @Override
+  public void deleteAll() {
+    __db.assertNotSuspendingTransaction();
+    final SupportSQLiteStatement _stmt = __preparedStmtOfDeleteAll.acquire();
+    try {
+      __db.beginTransaction();
+      try {
+        _stmt.executeUpdateDelete();
+        __db.setTransactionSuccessful();
+      } finally {
+        __db.endTransaction();
+      }
+    } finally {
+      __preparedStmtOfDeleteAll.release(_stmt);
     }
   }
 
@@ -162,6 +190,82 @@ public final class ShoppingDao_Impl implements ShoppingDao {
   @Override
   public List<ShoppingItem> getAllItemsSorted() {
     final String _sql = "SELECT * FROM shopping_items ORDER BY isPurchased ASC, id DESC";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
+    __db.assertNotSuspendingTransaction();
+    final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+    try {
+      final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+      final int _cursorIndexOfItemName = CursorUtil.getColumnIndexOrThrow(_cursor, "itemName");
+      final int _cursorIndexOfIsPurchased = CursorUtil.getColumnIndexOrThrow(_cursor, "isPurchased");
+      final List<ShoppingItem> _result = new ArrayList<ShoppingItem>(_cursor.getCount());
+      while (_cursor.moveToNext()) {
+        final ShoppingItem _item;
+        _item = new ShoppingItem();
+        final int _tmpId;
+        _tmpId = _cursor.getInt(_cursorIndexOfId);
+        _item.setId(_tmpId);
+        final String _tmpItemName;
+        if (_cursor.isNull(_cursorIndexOfItemName)) {
+          _tmpItemName = null;
+        } else {
+          _tmpItemName = _cursor.getString(_cursorIndexOfItemName);
+        }
+        _item.setItemName(_tmpItemName);
+        final boolean _tmpIsPurchased;
+        final int _tmp;
+        _tmp = _cursor.getInt(_cursorIndexOfIsPurchased);
+        _tmpIsPurchased = _tmp != 0;
+        _item.setPurchased(_tmpIsPurchased);
+        _result.add(_item);
+      }
+      return _result;
+    } finally {
+      _cursor.close();
+      _statement.release();
+    }
+  }
+
+  @Override
+  public List<ShoppingItem> getPendingItems() {
+    final String _sql = "SELECT * FROM shopping_items WHERE isPurchased = 0 ORDER BY id DESC";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
+    __db.assertNotSuspendingTransaction();
+    final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+    try {
+      final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+      final int _cursorIndexOfItemName = CursorUtil.getColumnIndexOrThrow(_cursor, "itemName");
+      final int _cursorIndexOfIsPurchased = CursorUtil.getColumnIndexOrThrow(_cursor, "isPurchased");
+      final List<ShoppingItem> _result = new ArrayList<ShoppingItem>(_cursor.getCount());
+      while (_cursor.moveToNext()) {
+        final ShoppingItem _item;
+        _item = new ShoppingItem();
+        final int _tmpId;
+        _tmpId = _cursor.getInt(_cursorIndexOfId);
+        _item.setId(_tmpId);
+        final String _tmpItemName;
+        if (_cursor.isNull(_cursorIndexOfItemName)) {
+          _tmpItemName = null;
+        } else {
+          _tmpItemName = _cursor.getString(_cursorIndexOfItemName);
+        }
+        _item.setItemName(_tmpItemName);
+        final boolean _tmpIsPurchased;
+        final int _tmp;
+        _tmp = _cursor.getInt(_cursorIndexOfIsPurchased);
+        _tmpIsPurchased = _tmp != 0;
+        _item.setPurchased(_tmpIsPurchased);
+        _result.add(_item);
+      }
+      return _result;
+    } finally {
+      _cursor.close();
+      _statement.release();
+    }
+  }
+
+  @Override
+  public List<ShoppingItem> getCompletedItems() {
+    final String _sql = "SELECT * FROM shopping_items WHERE isPurchased = 1 ORDER BY id DESC";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
     __db.assertNotSuspendingTransaction();
     final Cursor _cursor = DBUtil.query(__db, _statement, false, null);

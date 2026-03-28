@@ -9,43 +9,42 @@
     <fragment
         android:id="@+id/nav_home"
         android:name="com.example.pantrypal.ui.home.HomeFragment"
-        android:label="Home" />
+        android:label="@string/app_name" />
 
     <!-- 🔹 PANTRY -->
     <fragment
         android:id="@+id/nav_pantry"
         android:name="com.example.pantrypal.ui.pantry.PantryFragment"
-        android:label="Pantry" />
+        android:label="@string/title_pantry" />
 
     <!-- 🔹 RECIPES -->
     <fragment
         android:id="@+id/nav_recipes"
         android:name="com.example.pantrypal.ui.recipes.RecipesFragment"
-        android:label="Recipes">
+        android:label="@string/ai_recipe_title">
 
-        <!-- 🔥 SAFE NAVIGATION ACTION -->
+        <!-- 🔥 SAFE NAVIGATION -->
         <action
             android:id="@+id/action_recipes_to_saved"
             app:destination="@id/nav_saved_recipes" />
-
     </fragment>
 
     <!-- 🔹 SAVED RECIPES -->
     <fragment
         android:id="@+id/nav_saved_recipes"
         android:name="com.example.pantrypal.ui.recipes.SavedRecipesFragment"
-        android:label="Saved Recipes" />
+        android:label="@string/saved_recipes_title" />
 
     <!-- 🔹 SHOPPING -->
     <fragment
         android:id="@+id/nav_shopping"
         android:name="com.example.pantrypal.ui.shopping.ShoppingFragment"
-        android:label="Shopping" />
+        android:label="@string/shopping_title" />
 
     <!-- 🔹 PROFILE -->
     <fragment
         android:id="@+id/nav_profile"
         android:name="com.example.pantrypal.ui.profile.ProfileFragment"
-        android:label="Profile" />
+        android:label="@string/profile" />
 
 </navigation>

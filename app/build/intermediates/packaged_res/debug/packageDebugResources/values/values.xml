@@ -12,7 +12,7 @@
     <color name="white">#FFFFFFFF</color>
     <string name="about_pantry_pal">About PantryPal</string>
     <string name="account">Account</string>
-    <string name="add_item">Add Item</string>
+    <string name="add">Add</string>
     <string name="ai_enter_mood">Please enter your mood</string>
     <string name="ai_get_recipe">Get Recipe</string>
     <string name="ai_recipe_hint">How are you feeling?</string>
@@ -27,12 +27,14 @@
     <string name="clear_pantry_data">Clear Pantry Data</string>
     <string name="clear_pantry_msg">Are you sure?\nThis will permanently delete all pantry items.</string>
     <string name="clear_pantry_title">Clear Pantry Data</string>
+    <string name="count_default">0 Pending • 0 Done</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="data_management">Data Management</string>
     <string name="days_before_3">3 Days Before</string>
     <string name="days_before_format">%1$d Days Before</string>
     <string name="default_web_client_id" translatable="false">252701319602-68rkcqso4jujldm7rf5ji5ggth2f3afl.apps.googleusercontent.com</string>
     <string name="delete">Delete</string>
+    <string name="delete_all">Delete All</string>
     <string name="delete_item">Delete item</string>
     <string name="delete_item_confirm">Delete this item?</string>
     <string name="delete_recipe">Delete Recipe</string>
@@ -42,13 +44,16 @@
     <string name="empty_label">Empty</string>
     <string name="empty_subtitle">Start by adding items to your pantry</string>
     <string name="empty_title">No Pantry Items</string>
+    <string name="enter_item">Enter item</string>
     <string name="expired">Expired</string>
     <string name="expiring_soon">Expiring Soon</string>
     <string name="expiry_reminder">Expiry Reminder</string>
     <string name="filter">Filter</string>
     <string name="filter_all">All</string>
+    <string name="filter_done">Done</string>
     <string name="filter_expired">Expired</string>
     <string name="filter_expiring_soon">Expiring Soon</string>
+    <string name="filter_pending">Pending</string>
     <string name="filter_safe">Safe</string>
     <string name="gcm_defaultSenderId" translatable="false">252701319602</string>
     <string name="google_api_key" translatable="false">AIzaSyC7VQOLCdJXo0iTGPGkE3U46WVrSW6ot6g</string>
@@ -75,14 +80,13 @@
     <string name="save">Save</string>
     <string name="saved_recipes_title">Saved Recipes</string>
     <string name="share_recipe">Share Recipe</string>
-    <string name="shopping_hint">Enter item</string>
-    <string name="shopping_list_title">Shopping List</string>
+    <string name="shopping_title">Shopping List 🛒</string>
     <string name="status_expired">Expired</string>
     <string name="status_expiring_soon">Expiring Soon</string>
     <string name="status_safe">Safe</string>
     <string name="tap_to_add_items">Tap + to add items</string>
     <string name="title_pantry">Your Pantry</string>
-    <string name="total_value">Total Value</string>
+    <string name="total_value">Total</string>
     <style name="PP_PrimaryButton" parent="Widget.MaterialComponents.Button">
         <item name="android:insetLeft">0dp</item>
         <item name="android:insetRight">0dp</item>
