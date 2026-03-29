@@ -12,27 +12,31 @@ public class PantryItem {
     private int id;
 
     private String name;
-    private String quantity;
+
+    // ✅ FIXED: quantity should be int
+    private int quantity;
+
+    // ✅ Future-ready: multiple expiry support (comma separated)
     private String expiryDate;
 
-    // 🔥 NEW FIELD (Price)
     @ColumnInfo(name = "price")
     private double price;
 
-    // ✅ Required empty constructor for Room
+    // ✅ Required empty constructor (Room)
     public PantryItem() {
     }
 
-    // ✅ Constructor for inserting data (UPDATED)
+    // ✅ Main constructor (FINAL)
     @Ignore
-    public PantryItem(String name, String quantity, String expiryDate, double price) {
+    public PantryItem(String name, int quantity, String expiryDate, double price) {
         this.name = name;
         this.quantity = quantity;
         this.expiryDate = expiryDate;
         this.price = price;
     }
 
-    // ✅ Getters
+    // ===== GETTERS =====
+
     public int getId() {
         return id;
     }
@@ -41,7 +45,7 @@ public class PantryItem {
         return name;
     }
 
-    public String getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
@@ -53,7 +57,8 @@ public class PantryItem {
         return price;
     }
 
-    // ✅ Setters
+    // ===== SETTERS =====
+
     public void setId(int id) {
         this.id = id;
     }
@@ -62,7 +67,7 @@ public class PantryItem {
         this.name = name;
     }
 
-    public void setQuantity(String quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 

@@ -45,7 +45,7 @@
 26-->[androidx.core:core:1.9.0] C:\Users\Abhishek Gupta\.gradle\caches\transforms-4\e6fc90aafd9b6bfaea6990710d8d528d\transformed\core-1.9.0\AndroidManifest.xml:26:22-94
 27
 28    <application
-28-->C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:11:5-54:19
+28-->C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:11:5-55:19
 29        android:allowBackup="true"
 29-->C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:12:9-35
 30        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
@@ -140,12 +140,9 @@
 81-->C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:51:19-55
 82            android:exported="false" />
 82-->C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:51:56-80
-83        <activity
-83-->C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:52:9-83
-84            android:name="com.example.pantrypal.ShoppingListActivity"
-84-->C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:52:19-55
-85            android:exported="false" />
-85-->C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:52:56-80
+83
+84        <!-- ❌ ShoppingListActivity REMOVED -->
+85
 86        <activity
 86-->[com.google.firebase:firebase-auth:23.0.0] C:\Users\Abhishek Gupta\.gradle\caches\transforms-4\8d39424a5095e3624cb6e16ddd0c7ade\transformed\firebase-auth-23.0.0\AndroidManifest.xml:29:9-46:20
 87            android:name="com.google.firebase.auth.internal.GenericIdpActivity"

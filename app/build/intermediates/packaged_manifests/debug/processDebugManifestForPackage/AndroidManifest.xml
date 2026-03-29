@@ -80,9 +80,9 @@
         <activity
             android:name="com.example.pantrypal.RecipeDetailActivity"
             android:exported="false" />
-        <activity
-            android:name="com.example.pantrypal.ShoppingListActivity"
-            android:exported="false" />
+
+        <!-- ❌ ShoppingListActivity REMOVED -->
+
         <activity
             android:name="com.google.firebase.auth.internal.GenericIdpActivity"
             android:excludeFromRecents="true"

@@ -72,16 +72,16 @@
         "source": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-main-7:\\layout\\layout_empty_state.xml"
     },
     {
-        "merged": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-debug-5:\\mipmap-anydpi-v26_ic_launcher.xml.flat",
-        "source": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-main-7:\\mipmap-anydpi-v26\\ic_launcher.xml"
-    },
-    {
         "merged": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-debug-5:\\drawable_ic_filter_list_24.xml.flat",
         "source": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-main-7:\\drawable\\ic_filter_list_24.xml"
     },
     {
         "merged": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-debug-5:\\drawable_ic_delete_24.xml.flat",
         "source": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-main-7:\\drawable\\ic_delete_24.xml"
+    },
+    {
+        "merged": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-debug-5:\\mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-main-7:\\mipmap-anydpi-v26\\ic_launcher.xml"
     },
     {
         "merged": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-debug-5:\\anim_layout_fall_down.xml.flat",
@@ -106,10 +106,6 @@
     {
         "merged": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-debug-5:\\layout_fragment_profile.xml.flat",
         "source": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-main-7:\\layout\\fragment_profile.xml"
-    },
-    {
-        "merged": "com.example.pantrypal.app-debug-5:/layout_activity_shopping_list.xml.flat",
-        "source": "com.example.pantrypal.app-main-7:/layout/activity_shopping_list.xml"
     },
     {
         "merged": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-debug-5:\\mipmap-hdpi_ic_launcher.webp.flat",
@@ -210,6 +206,10 @@
     {
         "merged": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-debug-5:\\drawable_ic_inventory_24.xml.flat",
         "source": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-main-7:\\drawable\\ic_inventory_24.xml"
+    },
+    {
+        "merged": "com.example.pantrypal.app-debug-5:/layout_fragment_home.xml.flat",
+        "source": "com.example.pantrypal.app-main-7:/layout/fragment_home.xml"
     },
     {
         "merged": "C:\\Users\\Abhishek Gupta\\.gradle\\daemon\\8.7\\com.example.pantrypal.app-debug-5:\\layout_item_pantry.xml.flat",

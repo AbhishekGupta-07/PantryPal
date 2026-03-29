@@ -12,7 +12,7 @@ import androidx.room.RoomDatabase;
                 SavedRecipe.class,
                 ShoppingItem.class
         },
-        version = 7,
+        version = 8, // 🔥 increment version (important after model change)
         exportSchema = false
 )
 public abstract class PantryDatabase extends RoomDatabase {
@@ -34,7 +34,7 @@ public abstract class PantryDatabase extends RoomDatabase {
                                     PantryDatabase.class,
                                     "pantry_db"
                             )
-                            .fallbackToDestructiveMigration()
+                            .fallbackToDestructiveMigration() // 🔥 avoids crash
                             .build();
                 }
             }
@@ -42,7 +42,7 @@ public abstract class PantryDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    // 🔥 OPTIONAL (GOOD PRACTICE)
+    // Optional cleanup
     public static void destroyInstance() {
         INSTANCE = null;
     }

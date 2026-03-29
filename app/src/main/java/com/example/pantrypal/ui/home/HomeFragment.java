@@ -19,7 +19,6 @@ import com.example.pantrypal.PantryItem;
 import com.example.pantrypal.R;
 import com.example.pantrypal.utils.ExpiryUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 import java.util.Locale;
@@ -31,11 +30,11 @@ public class HomeFragment extends Fragment {
 
     private TextView tvTotal, tvSoon, tvExpired, tvSafe;
     private ImageButton btnProfile;
-    private FloatingActionButton btnAddItem; // ✅ ADDED
+    private View addItemBox;
 
     private PantryDao pantryDao;
 
-    public HomeFragment() { }
+    public HomeFragment() {}
 
     @Nullable
     @Override
@@ -49,25 +48,30 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // 🔹 INIT VIEWS
         tvTotal = view.findViewById(R.id.tvTotalValue);
         tvSoon = view.findViewById(R.id.tvSoonValue);
         tvExpired = view.findViewById(R.id.tvExpiredValue);
         tvSafe = view.findViewById(R.id.tvSafeValue);
 
         btnProfile = view.findViewById(R.id.btnProfile);
-        btnAddItem = view.findViewById(R.id.btnAddItem); // ✅ ADDED
+        addItemBox = view.findViewById(R.id.addItemBox);
 
         pantryDao = PantryDatabase.getInstance(requireContext()).pantryDao();
 
-        // 🔹 Add Item Button
-        btnAddItem.setOnClickListener(v ->
-                startActivity(new Intent(requireContext(), AddItemActivity.class))
-        );
+        // 🔹 ADD ITEM CLICK
+        if (addItemBox != null) {
+            addItemBox.setOnClickListener(v ->
+                    startActivity(new Intent(requireContext(), AddItemActivity.class))
+            );
+        }
 
-        // 🔹 Profile click (future)
-        btnProfile.setOnClickListener(v -> { });
+        // 🔹 PROFILE CLICK
+        if (btnProfile != null) {
+            btnProfile.setOnClickListener(v -> {});
+        }
 
-        // 🔹 Dashboard filters
+        // 🔹 FILTER CLICK
         setClickable(tvTotal, "ALL");
         setClickable(tvExpired, "EXPIRED");
         setClickable(tvSoon, "SOON");
@@ -86,13 +90,6 @@ public class HomeFragment extends Fragment {
         if (tv == null) return;
 
         tv.setOnClickListener(v -> openPantryWithFilter(filter));
-
-        View parent = (tv.getParent() instanceof View) ? (View) tv.getParent() : null;
-        if (parent != null) parent.setOnClickListener(v -> openPantryWithFilter(filter));
-
-        View parent2 = (parent != null && parent.getParent() instanceof View)
-                ? (View) parent.getParent() : null;
-        if (parent2 != null) parent2.setOnClickListener(v -> openPantryWithFilter(filter));
     }
 
     private void openPantryWithFilter(String filter) {
@@ -108,7 +105,6 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    // 🔥 DASHBOARD LOGIC
     private void loadDashboardData() {
 
         new Thread(() -> {
@@ -120,15 +116,17 @@ public class HomeFragment extends Fragment {
             int safe = 0;
             double totalValue = 0;
 
-            for (PantryItem item : all) {
+            if (all != null) {
+                for (PantryItem item : all) {
 
-                totalValue += item.getPrice(); // ✅ FIXED
+                    totalValue += item.getPrice();
 
-                String status = ExpiryUtils.getExpiryStatus(item.getExpiryDate());
+                    String status = ExpiryUtils.getExpiryStatus(item.getExpiryDate());
 
-                if ("Expired".equalsIgnoreCase(status)) expired++;
-                else if ("Expiring Soon".equalsIgnoreCase(status)) soon++;
-                else safe++;
+                    if ("Expired".equalsIgnoreCase(status)) expired++;
+                    else if ("Expiring Soon".equalsIgnoreCase(status)) soon++;
+                    else safe++;
+                }
             }
 
             final int fExpired = expired;
@@ -141,10 +139,10 @@ public class HomeFragment extends Fragment {
             if (isAdded()) {
                 requireActivity().runOnUiThread(() -> {
 
-                    tvTotal.setText(formattedValue);
-                    tvExpired.setText(String.valueOf(fExpired));
-                    tvSoon.setText(String.valueOf(fSoon));
-                    tvSafe.setText(String.valueOf(fSafe));
+                    if (tvTotal != null) tvTotal.setText(formattedValue);
+                    if (tvExpired != null) tvExpired.setText(String.valueOf(fExpired));
+                    if (tvSoon != null) tvSoon.setText(String.valueOf(fSoon));
+                    if (tvSafe != null) tvSafe.setText(String.valueOf(fSafe));
                 });
             }
 

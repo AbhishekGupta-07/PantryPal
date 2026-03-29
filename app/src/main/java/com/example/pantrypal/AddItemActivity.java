@@ -2,6 +2,7 @@ package com.example.pantrypal;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -21,53 +22,52 @@ public class AddItemActivity extends AppCompatActivity {
         super.onCreate(b);
         setContentView(R.layout.activity_add_item);
 
-        // 🔥 Bind views (IDs must match XML)
         etName = findViewById(R.id.etItemName);
         etQty = findViewById(R.id.etQuantity);
         etExpiry = findViewById(R.id.etExpiry);
         etPrice = findViewById(R.id.etPrice);
         btnSave = findViewById(R.id.btnSaveItem);
 
+        etQty.setText("1");
+
         etExpiry.setFocusable(false);
         etExpiry.setOnClickListener(v -> showDatePicker());
 
-        btnSave.setOnClickListener(v -> {
+        btnSave.setOnClickListener(v -> saveItem());
+    }
 
-            String name = etName.getText().toString().trim();
-            String qty = etQty.getText().toString().trim();
-            String expiry = (String) etExpiry.getTag();
+    private void saveItem() {
 
-            String priceStr = etPrice.getText().toString().trim();
-            double price = priceStr.isEmpty() ? 0 : Double.parseDouble(priceStr);
+        String name = etName.getText().toString().trim();
+        String qtyStr = etQty.getText().toString().trim();
+        String expiry = etExpiry.getText().toString().trim();
+        String priceStr = etPrice.getText().toString().trim();
 
-            if (name.isEmpty()) {
-                etName.setError("Enter item name");
-                return;
-            }
+        if (TextUtils.isEmpty(name)) {
+            etName.setError("Enter item name");
+            return;
+        }
 
-            if (qty.isEmpty()) {
-                etQty.setError("Enter quantity");
-                return;
-            }
+        int qty = TextUtils.isEmpty(qtyStr) ? 1 : Integer.parseInt(qtyStr);
+        double price = TextUtils.isEmpty(priceStr) ? 0 : Double.parseDouble(priceStr);
 
-            if (expiry == null) {
-                Toast.makeText(this, "Select expiry date", Toast.LENGTH_SHORT).show();
-                return;
-            }
+        if (TextUtils.isEmpty(expiry)) {
+            Toast.makeText(this, "Select expiry date", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-            PantryItem item = new PantryItem(name, qty, expiry, price);
+        PantryItem item = new PantryItem(name, qty, expiry, price);
 
-            new Thread(() -> {
-                PantryDatabase.getInstance(this)
-                        .pantryDao()
-                        .insertItem(item);
+        new Thread(() -> {
+            PantryDatabase.getInstance(this)
+                    .pantryDao()
+                    .insertItem(item);
 
-                runOnUiThread(() -> {
-                    Toast.makeText(this, "Item Added", Toast.LENGTH_SHORT).show();
-                    finish();
-                });
-            }).start();
-        });
+            runOnUiThread(() -> {
+                Toast.makeText(this, "Item Added", Toast.LENGTH_SHORT).show();
+                finish();
+            });
+        }).start();
     }
 
     private void showDatePicker() {
@@ -77,14 +77,10 @@ public class AddItemActivity extends AppCompatActivity {
                 this,
                 (view, year, month, day) -> {
 
-                    String displayDate = String.format(Locale.getDefault(),
+                    String date = String.format(Locale.getDefault(),
                             "%02d/%02d/%04d", day, month + 1, year);
 
-                    String isoDate = String.format(Locale.getDefault(),
-                            "%04d-%02d-%02d", year, month + 1, day);
-
-                    etExpiry.setText(displayDate);
-                    etExpiry.setTag(isoDate);
+                    etExpiry.setText(date);
                 },
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),

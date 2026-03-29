@@ -35,33 +35,34 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pantry, parent, false);
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.activity_pantry_item, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder h, int pos) {
+
         PantryItem item = itemList.get(pos);
 
-        h.tvName.setText(item.getName() == null ? "" : item.getName().trim());
+        // NAME
+        h.tvName.setText(item.getName());
 
-        // 🔥 PRICE SHOW (NEW)
-        double price = item.getPrice();
-        if (price > 0) {
-            h.tvPrice.setText("₹" + price);
+        // PRICE
+        if (item.getPrice() > 0) {
+            h.tvPrice.setText("₹" + item.getPrice());
         } else {
             h.tvPrice.setText("");
         }
 
-        // 🔥 FORMAT FIX
+        // QUANTITY
+        h.tvQty.setText("Qty: " + item.getQuantity());
+
+        // EXPIRY
         String exp = item.getExpiryDate();
+        h.tvExpiry.setText("Expiry: " + (exp == null ? "-" : exp));
 
-        String displayDate = (exp == null || exp.trim().isEmpty())
-                ? "-"
-                : formatToDisplay(exp.trim());
-
-        h.tvExpiry.setText("Expiry: " + displayDate);
-
+        // STATUS
         String status = ExpiryUtils.getExpiryStatus(exp);
         h.tvStatus.setText(status);
 
@@ -73,12 +74,14 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
             h.tvStatus.setTextColor(Color.parseColor("#4CAF50"));
         }
 
+        // MENU
         h.ivMore.setOnClickListener(v -> {
             PopupMenu popup = new PopupMenu(context, h.ivMore);
             popup.getMenuInflater().inflate(R.menu.item_actions_menu, popup.getMenu());
             forceShowMenuIcons(popup);
 
             popup.setOnMenuItemClickListener(menuItem -> {
+
                 int currentPos = h.getAdapterPosition();
                 if (currentPos == RecyclerView.NO_POSITION) return false;
 
@@ -103,12 +106,14 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
         return itemList.size();
     }
 
+    // 🔥 IMPORTANT (FILTER FIX)
     public void updateList(List<PantryItem> newList) {
         itemList.clear();
         if (newList != null) itemList.addAll(newList);
         notifyDataSetChanged();
     }
 
+    // DELETE
     private void showDeleteDialog(PantryItem item, int pos) {
         new AlertDialog.Builder(context)
                 .setTitle("Delete Item")
@@ -130,16 +135,21 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
                 .show();
     }
 
+    // EDIT WITH PRICE
     private void showEditDialog(PantryItem item, int pos) {
-        View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_edit_item, null);
+
+        View dialog = LayoutInflater.from(context)
+                .inflate(R.layout.dialog_edit_item, null);
 
         EditText etName = dialog.findViewById(R.id.etEditName);
-        EditText etQty  = dialog.findViewById(R.id.etEditQty);
-        EditText etExp  = dialog.findViewById(R.id.etEditExpiry);
+        EditText etQty = dialog.findViewById(R.id.etEditQty);
+        EditText etExp = dialog.findViewById(R.id.etEditExpiry);
+        EditText etPrice = dialog.findViewById(R.id.etEditPrice);
 
         etName.setText(item.getName());
-        etQty.setText(item.getQuantity());
-        etExp.setText(formatToDisplay(item.getExpiryDate()));
+        etQty.setText(String.valueOf(item.getQuantity()));
+        etExp.setText(item.getExpiryDate());
+        etPrice.setText(String.valueOf(item.getPrice()));
 
         new AlertDialog.Builder(context)
                 .setTitle("Edit Item")
@@ -147,7 +157,18 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
                 .setPositiveButton("Update", (d, w) -> {
 
                     item.setName(etName.getText().toString().trim());
-                    item.setQuantity(etQty.getText().toString().trim());
+
+                    int qty = etQty.getText().toString().isEmpty()
+                            ? 1
+                            : Integer.parseInt(etQty.getText().toString());
+
+                    double price = etPrice.getText().toString().isEmpty()
+                            ? 0
+                            : Double.parseDouble(etPrice.getText().toString());
+
+                    item.setQuantity(qty);
+                    item.setPrice(price);
+                    item.setExpiryDate(etExp.getText().toString());
 
                     new Thread(() -> {
                         pantryDao.updateItem(item);
@@ -156,17 +177,6 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
-    }
-
-    private String formatToDisplay(String isoDate) {
-        try {
-            java.time.LocalDate date = java.time.LocalDate.parse(isoDate);
-            java.time.format.DateTimeFormatter formatter =
-                    java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            return date.format(formatter);
-        } catch (Exception e) {
-            return isoDate;
-        }
     }
 
     private void runOnUi(Runnable r) {
@@ -179,7 +189,8 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
 
     private void forceShowMenuIcons(PopupMenu popup) {
         try {
-            Method m = popup.getMenu().getClass().getDeclaredMethod("setOptionalIconsVisible", boolean.class);
+            Method m = popup.getMenu().getClass()
+                    .getDeclaredMethod("setOptionalIconsVisible", boolean.class);
             m.setAccessible(true);
             m.invoke(popup.getMenu(), true);
         } catch (Exception ignored) {}
@@ -187,7 +198,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvName, tvExpiry, tvStatus, tvPrice; // 🔥 added price
+        TextView tvName, tvExpiry, tvStatus, tvPrice, tvQty;
         ImageView ivMore;
 
         ViewHolder(View v) {
@@ -195,7 +206,8 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
             tvName = v.findViewById(R.id.tvName);
             tvExpiry = v.findViewById(R.id.tvExpiry);
             tvStatus = v.findViewById(R.id.tvStatus);
-            tvPrice = v.findViewById(R.id.tvPrice); // 🔥 bind
+            tvPrice = v.findViewById(R.id.tvPrice);
+            tvQty = v.findViewById(R.id.tvQty);
             ivMore = v.findViewById(R.id.ivMore);
         }
     }
