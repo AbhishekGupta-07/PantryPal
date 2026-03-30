@@ -37,7 +37,7 @@ dependencies {
     implementation libs.activity
     implementation libs.constraintlayout
 
-    // ✅ GridLayout (Fix "Missing registered class")
+    // ✅ GridLayout
     implementation "androidx.gridlayout:gridlayout:1.0.0"
 
     // 🔥 Firebase Auth
@@ -60,6 +60,9 @@ dependencies {
     // ✅ NAVIGATION
     implementation "androidx.navigation:navigation-fragment:2.7.7"
     implementation "androidx.navigation:navigation-ui:2.7.7"
+
+    // 🔥🔥🔥 OCR (ML KIT) – IMPORTANT
+    implementation 'com.google.mlkit:text-recognition:16.0.0'
 
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit

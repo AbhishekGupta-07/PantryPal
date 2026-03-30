@@ -117,4 +117,9 @@
     <string name="logout_msg">Do you want to logout?</string>
     <string name="ok">OK</string>
 
+    <!-- 🔥 STEP 2.1 (NEW STRINGS) -->
+    <string name="scan_bill">📷 Scan Bill</string>
+    <string name="scan_barcode">🔍 Scan Barcode</string>
+    <string name="manual_entry">✍️ Manual Entry</string>
+
 </resources>

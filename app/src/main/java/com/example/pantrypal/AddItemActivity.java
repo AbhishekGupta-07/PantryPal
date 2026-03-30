@@ -28,11 +28,35 @@ public class AddItemActivity extends AppCompatActivity {
         etPrice = findViewById(R.id.etPrice);
         btnSave = findViewById(R.id.btnSaveItem);
 
+        // 🔥 DEFAULT QUANTITY
         etQty.setText("1");
 
+        // 🔥 DATE PICKER (no keyboard)
         etExpiry.setFocusable(false);
+        etExpiry.setClickable(true);
         etExpiry.setOnClickListener(v -> showDatePicker());
 
+        // 🔥 AUTO-FILL FROM SCAN (SAFE VERSION)
+        if (getIntent() != null) {
+
+            String name = getIntent().getStringExtra("name");
+            String price = getIntent().getStringExtra("price");
+            String expiry = getIntent().getStringExtra("expiry");
+
+            if (name != null && !name.trim().isEmpty()) {
+                etName.setText(name.trim());
+            }
+
+            if (price != null && !price.trim().isEmpty()) {
+                etPrice.setText(price.trim());
+            }
+
+            if (expiry != null && !expiry.trim().isEmpty()) {
+                etExpiry.setText(expiry.trim());
+            }
+        }
+
+        // 🔥 SAVE BUTTON
         btnSave.setOnClickListener(v -> saveItem());
     }
 
@@ -43,34 +67,49 @@ public class AddItemActivity extends AppCompatActivity {
         String expiry = etExpiry.getText().toString().trim();
         String priceStr = etPrice.getText().toString().trim();
 
+        // ✅ VALIDATIONS
         if (TextUtils.isEmpty(name)) {
             etName.setError("Enter item name");
             return;
         }
-
-        int qty = TextUtils.isEmpty(qtyStr) ? 1 : Integer.parseInt(qtyStr);
-        double price = TextUtils.isEmpty(priceStr) ? 0 : Double.parseDouble(priceStr);
 
         if (TextUtils.isEmpty(expiry)) {
             Toast.makeText(this, "Select expiry date", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        int qty;
+        double price;
+
+        try {
+            qty = TextUtils.isEmpty(qtyStr) ? 1 : Integer.parseInt(qtyStr);
+        } catch (Exception e) {
+            qty = 1;
+        }
+
+        try {
+            price = TextUtils.isEmpty(priceStr) ? 0 : Double.parseDouble(priceStr);
+        } catch (Exception e) {
+            price = 0;
+        }
+
         PantryItem item = new PantryItem(name, qty, expiry, price);
 
+        // 🔥 SAVE TO ROOM DB (SAFE THREAD)
         new Thread(() -> {
-            PantryDatabase.getInstance(this)
+            PantryDatabase.getInstance(getApplicationContext())
                     .pantryDao()
                     .insertItem(item);
 
             runOnUiThread(() -> {
-                Toast.makeText(this, "Item Added", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Item Added ✅", Toast.LENGTH_SHORT).show();
                 finish();
             });
         }).start();
     }
 
     private void showDatePicker() {
+
         Calendar calendar = Calendar.getInstance();
 
         DatePickerDialog dialog = new DatePickerDialog(
@@ -78,7 +117,8 @@ public class AddItemActivity extends AppCompatActivity {
                 (view, year, month, day) -> {
 
                     String date = String.format(Locale.getDefault(),
-                            "%02d/%02d/%04d", day, month + 1, year);
+                            "%02d/%02d/%04d",
+                            day, month + 1, year);
 
                     etExpiry.setText(date);
                 },

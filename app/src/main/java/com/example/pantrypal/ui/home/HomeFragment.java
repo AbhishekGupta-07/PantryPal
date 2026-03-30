@@ -12,11 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.pantrypal.AddItemActivity;
 import com.example.pantrypal.PantryDao;
 import com.example.pantrypal.PantryDatabase;
 import com.example.pantrypal.PantryItem;
 import com.example.pantrypal.R;
+import com.example.pantrypal.ui.AddItemOptionsActivity; // ✅ IMPORTANT CHANGE
 import com.example.pantrypal.utils.ExpiryUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -59,10 +59,10 @@ public class HomeFragment extends Fragment {
 
         pantryDao = PantryDatabase.getInstance(requireContext()).pantryDao();
 
-        // 🔹 ADD ITEM CLICK
+        // 🔥 ADD ITEM CLICK (UPDATED)
         if (addItemBox != null) {
             addItemBox.setOnClickListener(v ->
-                    startActivity(new Intent(requireContext(), AddItemActivity.class))
+                    startActivity(new Intent(requireContext(), AddItemOptionsActivity.class))
             );
         }
 

@@ -64,6 +64,7 @@
     <string name="logout">Logout</string>
     <string name="logout_msg">Do you want to logout?</string>
     <string name="logout_title">Logout</string>
+    <string name="manual_entry">✍️ Manual Entry</string>
     <string name="mark_item_done">Mark item as purchased</string>
     <string name="more_options">More options</string>
     <string name="no_saved_recipes">No Saved Recipes</string>
@@ -79,6 +80,8 @@
     <string name="safe_items">Safe</string>
     <string name="save">Save</string>
     <string name="saved_recipes_title">Saved Recipes</string>
+    <string name="scan_barcode">🔍 Scan Barcode</string>
+    <string name="scan_bill">📷 Scan Bill</string>
     <string name="share_recipe">Share Recipe</string>
     <string name="shopping_title">Shopping List 🛒</string>
     <string name="status_expired">Expired</string>

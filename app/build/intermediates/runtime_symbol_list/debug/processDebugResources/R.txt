@@ -3282,6 +3282,7 @@ int id action_text 0x7f080047
 int id actions 0x7f080048
 int id activity_chooser_view_content 0x7f080049
 int id add 0x7f08004a
+int id addItemBox 0x7f080279
 int id adjust_height 0x7f08004b
 int id adjust_width 0x7f08004c
 int id alertTitle 0x7f08004d
@@ -3323,10 +3324,10 @@ int id browser_actions_menu_view 0x7f080070
 int id btnAdd 0x7f080071
 int id btnAddItem 0x7f080072
 int id btnAll 0x7f080073
+int id btnCapture 0x7f08027e
 int id btnDelete 0x7f080074
 int id btnDeleteAll 0x7f080075
 int id btnDone 0x7f080076
-int id btnEdit 0x7f080077
 int id btnFilter 0x7f080078
 int id btnGetRecipe 0x7f080079
 int id btnGoogle 0x7f08007a
@@ -3338,6 +3339,8 @@ int id btnSaveDays 0x7f08007f
 int id btnSaveItem 0x7f080080
 int id btnSaveProfile 0x7f080081
 int id btnSaveRecipe 0x7f080082
+int id btnScanBarcode 0x7f080275
+int id btnScanOCR 0x7f080276
 int id btnShareRecipe 0x7f080083
 int id btnViewSavedRecipes 0x7f080084
 int id btnWatchVideo 0x7f080085
@@ -3345,7 +3348,6 @@ int id buttonPanel 0x7f080086
 int id cache_measures 0x7f080087
 int id callMeasure 0x7f080088
 int id cancel_button 0x7f080089
-int id cardsRow1 0x7f08008a
 int id carryVelocity 0x7f08008b
 int id cbDone 0x7f08008c
 int id center 0x7f08008d
@@ -3428,6 +3430,7 @@ int id enterAlways 0x7f0800d9
 int id enterAlwaysCollapsed 0x7f0800da
 int id etEditExpiry 0x7f0800db
 int id etEditName 0x7f0800dc
+int id etEditPrice 0x7f080278
 int id etEditQty 0x7f0800dd
 int id etEmail 0x7f0800de
 int id etExpiry 0x7f0800df
@@ -3484,6 +3487,7 @@ int id ifRoom 0x7f080111
 int id ignore 0x7f080112
 int id ignoreRequest 0x7f080113
 int id image 0x7f080114
+int id imageView 0x7f08027f
 int id imgAvatar 0x7f080115
 int id imgEditAvatar 0x7f080116
 int id imgEmpty 0x7f080117
@@ -3515,6 +3519,7 @@ int id locale 0x7f080130
 int id ltr 0x7f080131
 int id m3_side_sheet 0x7f080132
 int id main 0x7f080133
+int id manualEntry 0x7f08027b
 int id marquee 0x7f080134
 int id masked 0x7f080135
 int id match_constraint 0x7f080136
@@ -3671,6 +3676,8 @@ int id save_non_transition_alpha 0x7f0801cc
 int id save_overlay_view 0x7f0801cd
 int id sawtooth 0x7f0801ce
 int id scale 0x7f0801cf
+int id scanBarcode 0x7f08027c
+int id scanBill 0x7f08027d
 int id screen 0x7f0801d0
 int id scroll 0x7f0801d1
 int id scrollIndicatorDown 0x7f0801d2
@@ -3790,18 +3797,17 @@ int id tvEmptySubtitle 0x7f080243
 int id tvEmptyTitle 0x7f080244
 int id tvExpiredValue 0x7f080245
 int id tvExpiry 0x7f080246
-int id tvExpiryStatus 0x7f080247
 int id tvExpiryValue 0x7f080248
 int id tvGreeting 0x7f080249
 int id tvItem 0x7f08024a
-int id tvItemName 0x7f08024b
 int id tvName 0x7f08024c
 int id tvPantryTitle 0x7f08024d
 int id tvPrice 0x7f08024e
-int id tvQuantity 0x7f08024f
+int id tvQty 0x7f080277
 int id tvRecipeContent 0x7f080250
 int id tvRecipeResult 0x7f080251
 int id tvRecipeTitle 0x7f080252
+int id tvResult 0x7f080280
 int id tvSafeValue 0x7f080253
 int id tvSoonValue 0x7f080254
 int id tvStatus 0x7f080255
@@ -3953,6 +3959,8 @@ int layout abc_search_view 0x7f0b0019
 int layout abc_select_dialog_material 0x7f0b001a
 int layout abc_tooltip 0x7f0b001b
 int layout activity_add_item 0x7f0b001c
+int layout activity_add_item_options 0x7f0b0086
+int layout activity_bill_scan 0x7f0b0087
 int layout activity_edit_profile 0x7f0b001d
 int layout activity_login 0x7f0b001e
 int layout activity_login1 0x7f0b001f
@@ -4210,6 +4218,7 @@ int string m3_sys_motion_easing_linear 0x7f12008a
 int string m3_sys_motion_easing_standard 0x7f12008b
 int string m3_sys_motion_easing_standard_accelerate 0x7f12008c
 int string m3_sys_motion_easing_standard_decelerate 0x7f12008d
+int string manual_entry 0x7f120107
 int string mark_item_done 0x7f12008e
 int string material_clock_display_divider 0x7f12008f
 int string material_clock_toggle_content_description 0x7f120090
@@ -4316,6 +4325,8 @@ int string recipe_details 0x7f1200f4
 int string safe_items 0x7f1200f5
 int string save 0x7f1200f6
 int string saved_recipes_title 0x7f1200f7
+int string scan_barcode 0x7f120108
+int string scan_bill 0x7f120109
 int string search_menu_title 0x7f1200f8
 int string searchbar_scrolling_view_behavior 0x7f1200f9
 int string searchview_clear_text_content_description 0x7f1200fa

@@ -2,21 +2,39 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.pantrypal">
 
-    <!-- Internet (AI / APIs) -->
+    <!-- 🌐 Internet -->
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!-- Android 13+ Notifications -->
+    <!-- 📷 Camera -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- 🔧 FIX WARNING (VERY IMPORTANT) -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <!-- 🔔 Notifications -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:label="PantryPal"
         android:supportsRtl="true"
         android:theme="@style/Theme.PantryPal">
 
-        <!-- ================= SPLASH (Launcher) ================= -->
+        <!-- 📷 BILL SCAN -->
+        <activity
+            android:name=".ui.BillScanActivity"
+            android:exported="false" />
+
+        <!-- 📦 OPTIONS -->
+        <activity
+            android:name=".ui.AddItemOptionsActivity"
+            android:exported="false" />
+
+        <!-- 🚀 SPLASH -->
         <activity
             android:name=".SplashActivity"
             android:exported="true"
@@ -26,31 +44,46 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
-        <!-- ================= LOGIN ================= -->
+        <!-- 🔐 LOGIN -->
         <activity
             android:name=".LoginActivity"
             android:exported="true" />
 
-        <!-- ================= MAIN (Bottom Nav) ================= -->
+        <!-- 🏠 MAIN -->
         <activity
             android:name=".MainActivity"
             android:exported="true" />
 
-        <!-- ✅ EDIT PROFILE -->
+        <!-- 👤 PROFILE -->
         <activity
             android:name=".ui.profile.EditProfileActivity"
             android:exported="false" />
 
-        <!-- ================= OTHER SCREENS ================= -->
-        <activity android:name=".AddItemActivity" android:exported="false" />
-        <activity android:name=".PantryListActivity" android:exported="false" />
-        <activity android:name=".RecipeSuggestionActivity" android:exported="false" />
-        <activity android:name=".SavedRecipesActivity" android:exported="false" />
-        <activity android:name=".RecipeDetailActivity" android:exported="false" />
+        <!-- 🧾 ADD ITEM -->
+        <activity
+            android:name=".AddItemActivity"
+            android:exported="false" />
 
-        <!-- ❌ ShoppingListActivity REMOVED -->
+        <!-- 📋 PANTRY -->
+        <activity
+            android:name=".PantryListActivity"
+            android:exported="false" />
+
+        <!-- 🤖 RECIPES -->
+        <activity
+            android:name=".RecipeSuggestionActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".SavedRecipesActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".RecipeDetailActivity"
+            android:exported="false" />
 
     </application>
 
