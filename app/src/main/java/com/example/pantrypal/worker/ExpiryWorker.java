@@ -30,7 +30,7 @@ public class ExpiryWorker extends Worker {
 
         Context context = getApplicationContext();
 
-        // Create notification channel (safe to call multiple times)
+        // ✅ Safe notification channel creation
         NotificationUtils.createChannel(context);
 
         List<PantryItem> items =
@@ -38,15 +38,22 @@ public class ExpiryWorker extends Worker {
                         .pantryDao()
                         .getAllItems();
 
+        if (items == null || items.isEmpty()) {
+            return Result.success();   // ✅ prevent crash
+        }
+
         for (PantryItem item : items) {
+
+            if (item.getExpiryDate() == null) continue; // ✅ null safety
+
             String status = ExpiryUtils.getExpiryStatus(item.getExpiryDate());
 
-            if ("Expiring Soon".equals(status)) {
+            if ("Expiring Soon".equalsIgnoreCase(status)) {
                 sendNotification(
                         context,
                         item.getName(),
                         item.getExpiryDate(),
-                        item.getId()   // 👈 unique notification id
+                        item.getId()
                 );
             }
         }
@@ -59,8 +66,8 @@ public class ExpiryWorker extends Worker {
                                   String expiry,
                                   int notificationId) {
 
-        // Android 13+ permission safety
-        if (Build.VERSION.SDK_INT >= 33 &&
+        // ✅ Android 13+ permission safety
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
                 context.checkSelfPermission(
                         android.Manifest.permission.POST_NOTIFICATIONS)
                         != android.content.pm.PackageManager.PERMISSION_GRANTED) {
@@ -70,14 +77,13 @@ public class ExpiryWorker extends Worker {
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context, NotificationUtils.CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_launcher_foreground)
-                        .setContentTitle("Item Expiring Soon")
+                        .setContentTitle("⚠ Expiring Soon")
                         .setContentText(name + " expires on " + expiry)
                         .setPriority(NotificationCompat.PRIORITY_HIGH)
                         .setAutoCancel(true);
 
         NotificationManager manager =
-                (NotificationManager) context.getSystemService(
-                        Context.NOTIFICATION_SERVICE);
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (manager != null) {
             manager.notify(notificationId, builder.build());

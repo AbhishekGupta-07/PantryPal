@@ -2,8 +2,6 @@ package com.example.pantrypal;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -33,27 +31,17 @@ public class MainActivity extends AppCompatActivity {
 
         navController = navHostFragment.getNavController();
 
-        // 🔥 IMPORTANT: connect bottom nav to fragments
+        // 🔥 CONNECT NAVIGATION (ONLY THIS IS NEEDED)
         NavigationUI.setupWithNavController(bottomNav, navController);
 
-        // Debug log (optional)
+        // 🔍 DEBUG (optional)
         navController.addOnDestinationChangedListener((controller, destination, arguments) ->
-                Log.d("NAV", "Now at: " + destination.getId())
+                Log.d("NAV", "Now at: " + destination.getLabel())
         );
-
-        // 🔥 SIMPLE CLEAN NAVIGATION (NO ACTIVITY)
-        bottomNav.setOnItemSelectedListener(item ->
-                NavigationUI.onNavDestinationSelected(item, navController)
-        );
-
-        bottomNav.setOnItemReselectedListener(item -> {
-            // do nothing
-        });
     }
 
     @Override
     public boolean onSupportNavigateUp() {
-        return navController != null && navController.navigateUp()
-                || super.onSupportNavigateUp();
+        return navController.navigateUp() || super.onSupportNavigateUp();
     }
 }

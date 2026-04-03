@@ -8,21 +8,17 @@
         android:minSdkVersion="24"
         android:targetSdkVersion="34" />
 
-    <!-- 🌐 Internet -->
+    <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
-
-    <!-- 📷 Camera -->
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
-    <!-- 🔧 FIX WARNING (VERY IMPORTANT) -->
+    <!-- Camera optional -->
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
 
-    <!-- 🔔 Notifications -->
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -45,17 +41,7 @@
         android:testOnly="true"
         android:theme="@style/Theme.PantryPal" >
 
-        <!-- 📷 BILL SCAN -->
-        <activity
-            android:name="com.example.pantrypal.ui.BillScanActivity"
-            android:exported="false" />
-
-        <!-- 📦 OPTIONS -->
-        <activity
-            android:name="com.example.pantrypal.ui.AddItemOptionsActivity"
-            android:exported="false" />
-
-        <!-- 🚀 SPLASH -->
+        <!-- Splash -->
         <activity
             android:name="com.example.pantrypal.SplashActivity"
             android:exported="true"
@@ -67,32 +53,31 @@
             </intent-filter>
         </activity>
 
-        <!-- 🔐 LOGIN -->
+        <!-- Core Screens -->
         <activity
             android:name="com.example.pantrypal.LoginActivity"
             android:exported="true" />
-
-        <!-- 🏠 MAIN -->
         <activity
             android:name="com.example.pantrypal.MainActivity"
             android:exported="true" />
 
-        <!-- 👤 PROFILE -->
+        <!-- Scan -->
         <activity
-            android:name="com.example.pantrypal.ui.profile.EditProfileActivity"
+            android:name="com.example.pantrypal.ui.BillScanActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.pantrypal.ui.AddItemOptionsActivity"
             android:exported="false" />
 
-        <!-- 🧾 ADD ITEM -->
+        <!-- Pantry -->
         <activity
             android:name="com.example.pantrypal.AddItemActivity"
             android:exported="false" />
-
-        <!-- 📋 PANTRY -->
         <activity
             android:name="com.example.pantrypal.PantryListActivity"
             android:exported="false" />
 
-        <!-- 🤖 RECIPES -->
+        <!-- AI -->
         <activity
             android:name="com.example.pantrypal.RecipeSuggestionActivity"
             android:exported="false" />
@@ -101,6 +86,11 @@
             android:exported="false" />
         <activity
             android:name="com.example.pantrypal.RecipeDetailActivity"
+            android:exported="false" />
+
+        <!-- Profile -->
+        <activity
+            android:name="com.example.pantrypal.ui.profile.EditProfileActivity"
             android:exported="false" />
         <activity
             android:name="com.google.firebase.auth.internal.GenericIdpActivity"
@@ -153,23 +143,7 @@
                 android:name="com.google.firebase.components:com.google.firebase.FirebaseCommonKtxRegistrar"
                 android:value="com.google.firebase.components.ComponentRegistrar" />
         </service>
-        <service
-            android:name="androidx.credentials.playservices.CredentialProviderMetadataHolder"
-            android:enabled="true"
-            android:exported="false" >
-            <meta-data
-                android:name="androidx.credentials.CREDENTIAL_PROVIDER_KEY"
-                android:value="androidx.credentials.playservices.CredentialProviderPlayServicesImpl" />
-        </service>
 
-        <activity
-            android:name="androidx.credentials.playservices.HiddenActivity"
-            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
-            android:enabled="true"
-            android:exported="false"
-            android:fitsSystemWindows="true"
-            android:theme="@style/Theme.Hidden" >
-        </activity>
         <activity
             android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
             android:excludeFromRecents="true"
@@ -184,38 +158,7 @@
             android:exported="true"
             android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
             android:visibleToInstantApps="true" />
-        <service
-            android:name="com.google.mlkit.common.internal.MlKitComponentDiscoveryService"
-            android:directBootAware="true"
-            android:exported="false" >
-            <meta-data
-                android:name="com.google.firebase.components:com.google.mlkit.vision.text.internal.TextRegistrar"
-                android:value="com.google.firebase.components.ComponentRegistrar" />
-            <meta-data
-                android:name="com.google.firebase.components:com.google.mlkit.vision.common.internal.VisionCommonRegistrar"
-                android:value="com.google.firebase.components.ComponentRegistrar" />
-            <meta-data
-                android:name="com.google.firebase.components:com.google.mlkit.common.internal.CommonComponentRegistrar"
-                android:value="com.google.firebase.components.ComponentRegistrar" />
-        </service>
 
-        <provider
-            android:name="com.google.mlkit.common.internal.MlKitInitProvider"
-            android:authorities="com.example.pantrypal.mlkitinitprovider"
-            android:exported="false"
-            android:initOrder="99" />
-
-        <activity
-            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-            android:exported="false"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
-        <provider
-            android:name="com.google.firebase.provider.FirebaseInitProvider"
-            android:authorities="com.example.pantrypal.firebaseinitprovider"
-            android:directBootAware="true"
-            android:exported="false"
-            android:initOrder="100" />
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="com.example.pantrypal.androidx-startup"
@@ -331,6 +274,39 @@
             android:directBootAware="true"
             android:exported="false" />
 
+        <provider
+            android:name="com.google.firebase.provider.FirebaseInitProvider"
+            android:authorities="com.example.pantrypal.firebaseinitprovider"
+            android:directBootAware="true"
+            android:exported="false"
+            android:initOrder="100" />
+
+        <service
+            android:name="com.google.mlkit.common.internal.MlKitComponentDiscoveryService"
+            android:directBootAware="true"
+            android:exported="false" >
+            <meta-data
+                android:name="com.google.firebase.components:com.google.mlkit.vision.text.internal.TextRegistrar"
+                android:value="com.google.firebase.components.ComponentRegistrar" />
+            <meta-data
+                android:name="com.google.firebase.components:com.google.mlkit.vision.common.internal.VisionCommonRegistrar"
+                android:value="com.google.firebase.components.ComponentRegistrar" />
+            <meta-data
+                android:name="com.google.firebase.components:com.google.mlkit.common.internal.CommonComponentRegistrar"
+                android:value="com.google.firebase.components.ComponentRegistrar" />
+        </service>
+
+        <provider
+            android:name="com.google.mlkit.common.internal.MlKitInitProvider"
+            android:authorities="com.example.pantrypal.mlkitinitprovider"
+            android:exported="false"
+            android:initOrder="99" />
+
+        <activity
+            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <uses-library
             android:name="androidx.window.extensions"
             android:required="false" />
@@ -341,14 +317,6 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
-        <service
-            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
-            android:exported="false" >
-            <meta-data
-                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
-                android:value="cct" />
-        </service>
 
         <receiver
             android:name="androidx.profileinstaller.ProfileInstallReceiver"
@@ -370,6 +338,13 @@
             </intent-filter>
         </receiver>
 
+        <service
+            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+            android:exported="false" >
+            <meta-data
+                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+                android:value="cct" />
+        </service>
         <service
             android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
             android:exported="false"

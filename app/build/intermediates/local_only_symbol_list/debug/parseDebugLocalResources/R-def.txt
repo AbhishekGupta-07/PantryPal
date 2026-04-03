@@ -60,6 +60,7 @@ id btnScanOCR
 id btnShareRecipe
 id btnViewSavedRecipes
 id btnWatchVideo
+id cardRecipe
 id cbDone
 id emptyLayout
 id emptyView
@@ -71,10 +72,10 @@ id etEmail
 id etExpiry
 id etItem
 id etItemName
-id etMood
 id etPassword
 id etPrice
 id etQuantity
+id etUserInput
 id filterLayout
 id filter_all
 id filter_expired

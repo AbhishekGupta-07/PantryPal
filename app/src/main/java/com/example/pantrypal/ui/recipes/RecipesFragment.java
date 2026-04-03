@@ -1,156 +1,145 @@
 package com.example.pantrypal.ui.recipes;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.pantrypal.PantryDatabase;
+import com.example.pantrypal.PantryItem;
 import com.example.pantrypal.R;
 import com.example.pantrypal.SavedRecipe;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.List;
+
+import okhttp3.*;
+
 public class RecipesFragment extends Fragment {
 
+    private final String API_KEY = "PASTE_NEW_KEY";
+
     public RecipesFragment() {
-        super(R.layout.activity_recipe_suggestion); // ⚠️ ensure layout correct
+        super(R.layout.fragment_recipes);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
 
-        EditText etMood = view.findViewById(R.id.etMood);
+        EditText etInput = view.findViewById(R.id.etUserInput);
         Button btnGetRecipe = view.findViewById(R.id.btnGetRecipe);
         TextView tvDish = view.findViewById(R.id.tvDishName);
         TextView tvResult = view.findViewById(R.id.tvRecipeResult);
-        Button btnShare = view.findViewById(R.id.btnShareRecipe);
         Button btnSave = view.findViewById(R.id.btnSaveRecipe);
-        Button btnVideo = view.findViewById(R.id.btnWatchVideo);
-        Button btnSaved = view.findViewById(R.id.btnViewSavedRecipes);
         ProgressBar progressBar = view.findViewById(R.id.progressBar);
 
         btnGetRecipe.setOnClickListener(v -> {
 
-            String mood = etMood.getText().toString().trim();
+            String input = etInput.getText().toString().trim();
 
-            if (mood.isEmpty()) {
-                etMood.setError("Enter mood");
+            if (input.isEmpty()) {
+                etInput.setError("Enter something");
                 return;
             }
 
             progressBar.setVisibility(View.VISIBLE);
 
-            new Handler().postDelayed(() -> {
+            new Thread(() -> {
+                try {
 
-                if (!isAdded()) return;
+                    List<PantryItem> items =
+                            PantryDatabase.getInstance(requireContext())
+                                    .pantryDao()
+                                    .getAllItems();
 
-                progressBar.setVisibility(View.GONE);
+                    StringBuilder pantry = new StringBuilder();
 
-                String dish = "Masala Maggi 🍜";
-                String recipe =
-                        "1. Boil water\n" +
-                                "2. Add maggi\n" +
-                                "3. Add masala\n" +
-                                "4. Cook for 2 mins\n" +
-                                "5. Serve hot 😋";
+                    for (PantryItem item : items) {
+                        pantry.append(item.getName()).append(", ");
+                    }
 
-                tvDish.setText(dish);
-                tvResult.setText(recipe);
+                    String prompt = "Give recipe for: " + input + "\nPantry: " + pantry;
 
-                tvDish.setVisibility(View.VISIBLE);
-                tvResult.setVisibility(View.VISIBLE);
-                btnShare.setVisibility(View.VISIBLE);
-                btnSave.setVisibility(View.VISIBLE);
-                btnVideo.setVisibility(View.VISIBLE);
-                btnSaved.setVisibility(View.VISIBLE);
+                    OkHttpClient client = new OkHttpClient();
 
-            }, 1200);
+                    JSONObject part = new JSONObject();
+                    part.put("text", prompt);
+
+                    JSONArray parts = new JSONArray();
+                    parts.put(part);
+
+                    JSONObject content = new JSONObject();
+                    content.put("parts", parts);
+
+                    JSONArray contents = new JSONArray();
+                    contents.put(content);
+
+                    JSONObject body = new JSONObject();
+                    body.put("contents", contents);
+
+                    Request request = new Request.Builder()
+                            .url("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + API_KEY)
+                            .post(RequestBody.create(
+                                    body.toString(),
+                                    MediaType.parse("application/json")
+                            ))
+                            .build();
+
+                    Response response = client.newCall(request).execute();
+
+                    String res = response.body().string();
+
+                    Log.d("AI_RESPONSE", res);
+
+                    JSONObject json = new JSONObject(res);
+
+                    String result = json
+                            .getJSONArray("candidates")
+                            .getJSONObject(0)
+                            .getJSONObject("content")
+                            .getJSONArray("parts")
+                            .getJSONObject(0)
+                            .getString("text");
+
+                    requireActivity().runOnUiThread(() -> {
+                        progressBar.setVisibility(View.GONE);
+                        tvDish.setText("AI Recipe 🍽");
+                        tvResult.setText(result);
+                        btnSave.setVisibility(View.VISIBLE);
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                    requireActivity().runOnUiThread(() -> {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(getContext(), "Error ❌", Toast.LENGTH_SHORT).show();
+                    });
+                }
+
+            }).start();
         });
 
-        // 📤 SHARE
-        btnShare.setOnClickListener(v -> {
-
-            String dish = tvDish.getText().toString();
-            String recipe = tvResult.getText().toString();
-
-            if (dish.isEmpty()) {
-                Toast.makeText(getContext(), "Generate recipe first", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            String text = dish + "\n\n" + recipe;
-
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.setType("text/plain");
-            intent.putExtra(Intent.EXTRA_TEXT, text);
-
-            startActivity(Intent.createChooser(intent, "Share Recipe"));
-        });
-
-        // ❤️ SAVE
         btnSave.setOnClickListener(v -> {
 
             String dish = tvDish.getText().toString();
             String recipe = tvResult.getText().toString();
 
-            if (dish.isEmpty()) {
-                Toast.makeText(getContext(), "Generate recipe first", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            SavedRecipe savedRecipe = new SavedRecipe(dish, recipe);
+            if (recipe.isEmpty()) return;
 
             new Thread(() -> {
-
-                if (getContext() == null) return;
-
-                PantryDatabase.getInstance(getContext())
+                PantryDatabase.getInstance(requireContext())
                         .savedRecipeDao()
-                        .insert(savedRecipe);
-
-                if (!isAdded()) return;
-
-                requireActivity().runOnUiThread(() ->
-                        Toast.makeText(getContext(), "Saved Successfully ❤️", Toast.LENGTH_SHORT).show()
-                );
-
+                        .insert(new SavedRecipe(dish, recipe));
             }).start();
-        });
 
-        // ▶ YOUTUBE
-        btnVideo.setOnClickListener(v -> {
-
-            String dish = tvDish.getText().toString();
-
-            if (dish.isEmpty()) {
-                Toast.makeText(getContext(), "Generate recipe first", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            String query = dish + " recipe";
-
-            Intent intent = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("https://www.youtube.com/results?search_query=" + query));
-
-            startActivity(intent);
-        });
-
-        // 📂 VIEW SAVED
-        btnSaved.setOnClickListener(v -> {
-
-            try {
-                NavHostFragment.findNavController(this)
-                        .navigate(R.id.action_recipes_to_saved);
-            } catch (Exception e) {
-                Toast.makeText(getContext(), "Navigation error", Toast.LENGTH_SHORT).show();
-            }
+            Toast.makeText(getContext(), "Saved ❤️", Toast.LENGTH_SHORT).show();
         });
     }
 }
