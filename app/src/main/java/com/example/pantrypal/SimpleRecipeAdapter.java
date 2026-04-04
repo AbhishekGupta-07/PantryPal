@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,16 +46,19 @@ public class SimpleRecipeAdapter extends RecyclerView.Adapter<SimpleRecipeAdapte
         SharedPreferences prefs = context.getSharedPreferences("recipes", Context.MODE_PRIVATE);
         Set<String> favSet = new HashSet<>(prefs.getStringSet("fav", new HashSet<>()));
 
+        // ❤️ Fav UI
         holder.btnFav.setText(favSet.contains(name) ? "❤️" : "🤍");
 
         String finalName = name;
 
+        // 🔥 OPEN DETAIL
         holder.itemView.setOnClickListener(v -> {
             Intent i = new Intent(context, RecipeDetailActivity.class);
             i.putExtra("name", finalName);
             context.startActivity(i);
         });
 
+        // ❤️ TOGGLE FAVORITE
         holder.btnFav.setOnClickListener(v -> {
 
             Set<String> updated = new HashSet<>(prefs.getStringSet("fav", new HashSet<>()));
@@ -70,26 +72,6 @@ public class SimpleRecipeAdapter extends RecyclerView.Adapter<SimpleRecipeAdapte
             prefs.edit().putStringSet("fav", updated).apply();
             notifyItemChanged(position);
         });
-
-        holder.btnDelete.setOnClickListener(v -> {
-
-            Set<String> data;
-
-            if ("fav".equals(type)) {
-                data = new HashSet<>(prefs.getStringSet("fav", new HashSet<>()));
-                data.remove(finalName);
-                prefs.edit().putStringSet("fav", data).apply();
-            } else {
-                data = new HashSet<>(prefs.getStringSet("saved", new HashSet<>()));
-                data.remove(finalName);
-                prefs.edit().putStringSet("saved", data).apply();
-            }
-
-            list.remove(position);
-            notifyItemRemoved(position);
-
-            Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
-        });
     }
 
     @Override
@@ -99,14 +81,13 @@ public class SimpleRecipeAdapter extends RecyclerView.Adapter<SimpleRecipeAdapte
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvName, btnFav, btnDelete;
+        TextView tvName, btnFav;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tvName = itemView.findViewById(R.id.tvName);
             btnFav = itemView.findViewById(R.id.btnFav);
-            btnDelete = itemView.findViewById(R.id.btnDelete);
         }
     }
 }
