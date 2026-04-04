@@ -6,19 +6,20 @@
     android:layout_height="match_parent"
     android:background="#FAFAFA">
 
-    <!-- TOOLBAR -->
+    <!-- 🔝 TOOLBAR -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:title="@string/recipe_details"
-        app:titleTextColor="@android:color/white" />
+        app:title="Recipe Details"
+        app:titleTextColor="@android:color/white"/>
 
-    <!-- CONTENT -->
+    <!-- 📜 CONTENT -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         android:padding="16dp">
 
         <LinearLayout
@@ -26,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!-- TITLE -->
+            <!-- 🍽 TITLE -->
             <TextView
                 android:id="@+id/tvRecipeTitle"
                 android:layout_width="match_parent"
@@ -34,34 +35,89 @@
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:textColor="#212121"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="12dp"/>
 
-            <!-- DIVIDER -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#DDDDDD"
-                android:layout_marginBottom="12dp" />
-
-            <!-- CONTENT -->
+            <!-- 📄 CONTENT -->
             <TextView
                 android:id="@+id/tvRecipeContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:textColor="#424242"
-                android:lineSpacingExtra="6dp" />
+                android:lineSpacingExtra="6dp"
+                android:layout_marginBottom="20dp"/>
 
-            <!-- SHARE BUTTON -->
-            <Button
-                android:id="@+id/btnShareRecipe"
-                android:layout_width="wrap_content"
+            <!-- 🔥 BUTTON GRID -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_gravity="center"
-                android:text="@string/share_recipe" />
+                android:orientation="vertical">
+
+                <!-- ROW 1 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp">
+
+                    <Button
+                        android:id="@+id/btnFav"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:text="❤️ Favorite"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:backgroundTint="#FCE4EC"
+                        android:textColor="#E91E63"
+                        android:layout_marginEnd="6dp"/>
+
+                    <Button
+                        android:id="@+id/btnSave"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:text="💾 Save"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:backgroundTint="#E8EAF6"
+                        android:textColor="#3F51B5"
+                        android:layout_marginStart="6dp"/>
+                </LinearLayout>
+
+                <!-- ROW 2 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnShareRecipe"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:text="📤 Share"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:backgroundTint="?attr/colorPrimary"
+                        android:textColor="@android:color/white"
+                        android:layout_marginEnd="6dp"/>
+
+                    <Button
+                        android:id="@+id/btnYoutube"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:text="🎥 YouTube"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:backgroundTint="#FF0000"
+                        android:textColor="@android:color/white"
+                        android:layout_marginStart="6dp"/>
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
-
 </LinearLayout>

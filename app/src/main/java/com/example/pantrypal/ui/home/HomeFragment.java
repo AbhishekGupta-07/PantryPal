@@ -1,11 +1,12 @@
 package com.example.pantrypal.ui.home;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,21 +17,22 @@ import com.example.pantrypal.PantryDao;
 import com.example.pantrypal.PantryDatabase;
 import com.example.pantrypal.PantryItem;
 import com.example.pantrypal.R;
-import com.example.pantrypal.ui.AddItemOptionsActivity; // ✅ IMPORTANT CHANGE
-import com.example.pantrypal.utils.ExpiryUtils;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.pantrypal.SavedRecipesActivity;
+import com.example.pantrypal.ui.AddItemOptionsActivity;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+import java.util.HashSet;
 
 public class HomeFragment extends Fragment {
 
-    private static final String RESULT_KEY = "pantry_filter_request";
-    private static final String FILTER_KEY = "filter";
-
     private TextView tvTotal, tvSoon, tvExpired, tvSafe;
-    private ImageButton btnProfile;
-    private View addItemBox;
+    private TextView tvFavCount, tvSavedCount;
+
+    private View addItemBox, cardFavorites, cardSaved;
 
     private PantryDao pantryDao;
 
@@ -48,101 +50,112 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // 🔹 INIT VIEWS
         tvTotal = view.findViewById(R.id.tvTotalValue);
         tvSoon = view.findViewById(R.id.tvSoonValue);
         tvExpired = view.findViewById(R.id.tvExpiredValue);
         tvSafe = view.findViewById(R.id.tvSafeValue);
 
-        btnProfile = view.findViewById(R.id.btnProfile);
+        tvFavCount = view.findViewById(R.id.tvFavCount);
+        tvSavedCount = view.findViewById(R.id.tvSavedCount);
+
         addItemBox = view.findViewById(R.id.addItemBox);
+        cardFavorites = view.findViewById(R.id.cardFavorites);
+        cardSaved = view.findViewById(R.id.cardSaved);
 
         pantryDao = PantryDatabase.getInstance(requireContext()).pantryDao();
 
-        // 🔥 ADD ITEM CLICK (UPDATED)
-        if (addItemBox != null) {
-            addItemBox.setOnClickListener(v ->
-                    startActivity(new Intent(requireContext(), AddItemOptionsActivity.class))
-            );
-        }
+        addItemBox.setOnClickListener(v ->
+                startActivity(new Intent(requireContext(), AddItemOptionsActivity.class)));
 
-        // 🔹 PROFILE CLICK
-        if (btnProfile != null) {
-            btnProfile.setOnClickListener(v -> {});
-        }
+        cardFavorites.setOnClickListener(v -> {
+            Intent i = new Intent(requireContext(), SavedRecipesActivity.class);
+            i.putExtra("type", "fav");
+            startActivity(i);
+        });
 
-        // 🔹 FILTER CLICK
-        setClickable(tvTotal, "ALL");
-        setClickable(tvExpired, "EXPIRED");
-        setClickable(tvSoon, "SOON");
-        setClickable(tvSafe, "SAFE");
+        cardSaved.setOnClickListener(v -> {
+            Intent i = new Intent(requireContext(), SavedRecipesActivity.class);
+            i.putExtra("type", "saved");
+            startActivity(i);
+        });
 
         loadDashboardData();
+        updateCounts();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         loadDashboardData();
+        updateCounts();
     }
 
-    private void setClickable(TextView tv, String filter) {
-        if (tv == null) return;
+    // ✅ FIXED (IMPORTANT)
+    private void updateCounts() {
 
-        tv.setOnClickListener(v -> openPantryWithFilter(filter));
-    }
+        SharedPreferences prefs = requireContext().getSharedPreferences("recipes", Context.MODE_PRIVATE);
 
-    private void openPantryWithFilter(String filter) {
-        if (!isAdded()) return;
+        Set<String> fav = prefs.getStringSet("fav", new HashSet<>());
+        Set<String> saved = prefs.getStringSet("saved", new HashSet<>());
 
-        Bundle b = new Bundle();
-        b.putString(FILTER_KEY, filter);
-        getParentFragmentManager().setFragmentResult(RESULT_KEY, b);
+        int favCount = (fav != null) ? fav.size() : 0;
+        int savedCount = (saved != null) ? saved.size() : 0;
 
-        BottomNavigationView bottomNav = requireActivity().findViewById(R.id.bottomNav);
-        if (bottomNav != null) {
-            bottomNav.setSelectedItemId(R.id.nav_pantry);
-        }
+        tvFavCount.setText(favCount + " Recipes");
+        tvSavedCount.setText(savedCount + " Recipes");
     }
 
     private void loadDashboardData() {
 
         new Thread(() -> {
 
-            List<PantryItem> all = pantryDao.getAllItems();
+            List<PantryItem> list = pantryDao.getAllItems();
 
-            int expired = 0;
-            int soon = 0;
-            int safe = 0;
-            double totalValue = 0;
+            double total = 0;
+            int soon = 0, expired = 0, safe = 0;
 
-            if (all != null) {
-                for (PantryItem item : all) {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            Date today = new Date();
 
-                    totalValue += item.getPrice();
+            if (list != null) {
+                for (PantryItem item : list) {
 
-                    String status = ExpiryUtils.getExpiryStatus(item.getExpiryDate());
+                    total += item.getPrice();
 
-                    if ("Expired".equalsIgnoreCase(status)) expired++;
-                    else if ("Expiring Soon".equalsIgnoreCase(status)) soon++;
-                    else safe++;
+                    try {
+                        String expiryStr = item.getExpiryDate();
+
+                        if (expiryStr != null && !expiryStr.isEmpty()) {
+
+                            Date expiry = sdf.parse(expiryStr);
+
+                            if (expiry != null) {
+
+                                long diff = expiry.getTime() - today.getTime();
+
+                                if (diff < 0) expired++;
+                                else if (diff <= 3L * 24 * 60 * 60 * 1000) soon++;
+                                else safe++;
+                            }
+                        }
+
+                    } catch (Exception ignored) {}
                 }
             }
 
-            final int fExpired = expired;
-            final int fSoon = soon;
-            final int fSafe = safe;
+            final double finalTotal = total;
+            final int finalSoon = soon;
+            final int finalExpired = expired;
+            final int finalSafe = safe;
 
-            final String formattedValue =
-                    "₹" + String.format(Locale.getDefault(), "%.0f", totalValue);
+            final String totalStr = "₹" + String.format(Locale.getDefault(), "%.0f", finalTotal);
 
             if (isAdded()) {
                 requireActivity().runOnUiThread(() -> {
-
-                    if (tvTotal != null) tvTotal.setText(formattedValue);
-                    if (tvExpired != null) tvExpired.setText(String.valueOf(fExpired));
-                    if (tvSoon != null) tvSoon.setText(String.valueOf(fSoon));
-                    if (tvSafe != null) tvSafe.setText(String.valueOf(fSafe));
+                    tvTotal.setText(totalStr);
+                    tvSoon.setText(String.valueOf(finalSoon));
+                    tvExpired.setText(String.valueOf(finalExpired));
+                    tvSafe.setText(String.valueOf(finalSafe));
                 });
             }
 

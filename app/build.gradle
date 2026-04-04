@@ -23,11 +23,16 @@ android {
         }
     }
 
-    // 🔥 IMPORTANT FIX (Java 8+ support for LocalDate)
+    // 🔥 VERY IMPORTANT (FIX BuildConfig ERROR)
+    buildFeatures {
+        buildConfig true
+    }
+
+    // Java 17 + desugaring
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
-        coreLibraryDesugaringEnabled true   // ✅ ADD THIS
+        coreLibraryDesugaringEnabled true
     }
 }
 
@@ -52,6 +57,9 @@ dependencies {
     // GEMINI (API calls)
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
 
+    // 🔥 REQUIRED FOR JSON (FIXES 50+ ERRORS)
+    implementation 'com.google.code.gson:gson:2.10.1'
+
     // ML KIT (OCR)
     implementation 'com.google.mlkit:text-recognition:16.0.0'
 
@@ -65,6 +73,6 @@ dependencies {
     // LIFECYCLE
     implementation 'androidx.lifecycle:lifecycle-runtime:2.6.2'
 
-    // 🔥 VERY IMPORTANT (fix LocalDate crash)
+    // DESUGARING
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
 }

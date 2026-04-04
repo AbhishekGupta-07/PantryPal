@@ -19,29 +19,49 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // 🔹 Bottom Navigation
         BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
 
+        // 🔹 NavHostFragment
         NavHostFragment navHostFragment =
                 (NavHostFragment) getSupportFragmentManager()
                         .findFragmentById(R.id.navHostFragment);
 
         if (navHostFragment == null) {
-            throw new IllegalStateException("NavHostFragment not found.");
+            throw new IllegalStateException("NavHostFragment not found. Check activity_main.xml");
         }
 
         navController = navHostFragment.getNavController();
 
-        // 🔥 CONNECT NAVIGATION (ONLY THIS IS NEEDED)
+        // 🔥 MAIN CONNECTION (IMPORTANT)
         NavigationUI.setupWithNavController(bottomNav, navController);
 
-        // 🔍 DEBUG (optional)
+        // 🔍 DEBUG LOG (optional but useful)
         navController.addOnDestinationChangedListener((controller, destination, arguments) ->
                 Log.d("NAV", "Now at: " + destination.getLabel())
         );
     }
 
+    // 🔙 BACK HANDLING
     @Override
     public boolean onSupportNavigateUp() {
         return navController.navigateUp() || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (navController != null && navController.getCurrentDestination() != null) {
+
+            int id = navController.getCurrentDestination().getId();
+
+            // 🔥 If not on Home → go to Home
+            if (id != R.id.nav_home) {
+                navController.navigate(R.id.nav_home);
+            } else {
+                super.onBackPressed();
+            }
+        } else {
+            super.onBackPressed();
+        }
     }
 }

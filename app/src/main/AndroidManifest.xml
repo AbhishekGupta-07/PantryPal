@@ -2,16 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.pantrypal">
 
-    <!-- 🌐 INTERNET (AI + API calls) -->
+    <!-- 🌐 INTERNET -->
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!-- 📷 CAMERA (OCR / Scan feature) -->
+    <!-- 📷 CAMERA -->
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <!-- 🔔 NOTIFICATIONS (Expiry alerts - Android 13+) -->
+    <!-- 🔔 NOTIFICATIONS (Android 13+) -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
-    <!-- Camera optional -->
+    <!-- 📷 CAMERA OPTIONAL -->
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -24,7 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PantryPal">
 
-        <!-- 🚀 SPLASH (Launcher) -->
+        <!-- 🚀 SPLASH (LAUNCHER) -->
         <activity
             android:name=".SplashActivity"
             android:exported="true"
@@ -35,7 +35,7 @@
             </intent-filter>
         </activity>
 
-        <!-- 🔐 AUTH -->
+        <!-- 🔐 LOGIN -->
         <activity
             android:name=".LoginActivity"
             android:exported="true" />
@@ -50,6 +50,7 @@
             android:name=".ui.BillScanActivity"
             android:exported="false" />
 
+        <!-- ➕ ADD ITEM OPTIONS -->
         <activity
             android:name=".ui.AddItemOptionsActivity"
             android:exported="false" />
@@ -63,11 +64,7 @@
             android:name=".PantryListActivity"
             android:exported="false" />
 
-        <!-- 🤖 AI -->
-        <activity
-            android:name=".RecipeSuggestionActivity"
-            android:exported="false" />
-
+        <!-- 🤖 RECIPES -->
         <activity
             android:name=".SavedRecipesActivity"
             android:exported="false" />

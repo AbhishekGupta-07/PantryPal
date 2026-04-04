@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:2:1-86:12
-INJECTED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:2:1-86:12
-INJECTED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:2:1-86:12
-INJECTED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:2:1-86:12
+ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:2:1-83:12
+INJECTED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:2:1-83:12
+INJECTED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:2:1-83:12
+INJECTED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:2:1-83:12
 MERGED from [androidx.navigation:navigation-common:2.7.7] C:\Users\Abhishek Gupta\.gradle\caches\transforms-4\ece906cac36fcb9881d48141d3023582\transformed\navigation-common-2.7.7\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.navigation:navigation-runtime:2.7.7] C:\Users\Abhishek Gupta\.gradle\caches\transforms-4\aa8cd0796fe3cde37061c43270f68759\transformed\navigation-runtime-2.7.7\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.navigation:navigation-fragment:2.7.7] C:\Users\Abhishek Gupta\.gradle\caches\transforms-4\ae0660ce4412970df51234885c461916\transformed\navigation-fragment-2.7.7\AndroidManifest.xml:17:1-22:12
@@ -126,8 +126,8 @@ ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:15:5-17
 	android:name
 		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:16:9-47
 application
-ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:19:5-84:19
-INJECTED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:19:5-84:19
+ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:19:5-81:19
+INJECTED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:19:5-81:19
 MERGED from [com.google.android.material:material:1.11.0] C:\Users\Abhishek Gupta\.gradle\caches\transforms-4\5e448a10c56566bff132871ce3a88215\transformed\material-1.11.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.11.0] C:\Users\Abhishek Gupta\.gradle\caches\transforms-4\5e448a10c56566bff132871ce3a88215\transformed\material-1.11.0\AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\Abhishek Gupta\.gradle\caches\transforms-4\837199ef3d7dd7a7268f833d47255bfd\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
@@ -237,47 +237,41 @@ ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:49:9-51
 	android:name
 		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:50:13-48
 activity#com.example.pantrypal.ui.AddItemOptionsActivity
-ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:53:9-55:40
+ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:54:9-56:40
 	android:exported
-		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:55:13-37
+		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:56:13-37
 	android:name
-		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:54:13-54
+		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:55:13-54
 activity#com.example.pantrypal.AddItemActivity
-ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:58:9-60:40
+ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:59:9-61:40
 	android:exported
-		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:60:13-37
+		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:61:13-37
 	android:name
-		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:59:13-44
+		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:60:13-44
 activity#com.example.pantrypal.PantryListActivity
-ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:62:9-64:40
+ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:63:9-65:40
 	android:exported
-		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:64:13-37
+		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:65:13-37
 	android:name
-		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:63:13-47
-activity#com.example.pantrypal.RecipeSuggestionActivity
-ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:67:9-69:40
-	android:exported
-		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:69:13-37
-	android:name
-		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:68:13-53
+		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:64:13-47
 activity#com.example.pantrypal.SavedRecipesActivity
-ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:71:9-73:40
+ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:68:9-70:40
 	android:exported
-		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:73:13-37
+		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:70:13-37
 	android:name
-		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:72:13-49
+		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:69:13-49
 activity#com.example.pantrypal.RecipeDetailActivity
-ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:75:9-77:40
+ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:72:9-74:40
 	android:exported
-		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:77:13-37
+		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:74:13-37
 	android:name
-		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:76:13-49
+		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:73:13-49
 activity#com.example.pantrypal.ui.profile.EditProfileActivity
-ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:80:9-82:40
+ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:77:9-79:40
 	android:exported
-		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:82:13-37
+		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:79:13-37
 	android:name
-		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:81:13-59
+		ADDED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml:78:13-59
 uses-sdk
 INJECTED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\AndroidProjects\Pantrypal\app\src\main\AndroidManifest.xml

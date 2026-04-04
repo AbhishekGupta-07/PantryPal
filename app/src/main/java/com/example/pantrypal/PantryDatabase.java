@@ -12,17 +12,19 @@ import androidx.room.RoomDatabase;
                 SavedRecipe.class,
                 ShoppingItem.class
         },
-        version = 8, // 🔥 increment version (important after model change)
+        version = 8, // 🔥 update whenever schema changes
         exportSchema = false
 )
 public abstract class PantryDatabase extends RoomDatabase {
 
     private static volatile PantryDatabase INSTANCE;
 
+    // 🔹 DAO access
     public abstract PantryDao pantryDao();
     public abstract SavedRecipeDao savedRecipeDao();
     public abstract ShoppingDao shoppingDao();
 
+    // 🔥 Singleton instance
     public static PantryDatabase getInstance(Context context) {
 
         if (INSTANCE == null) {
@@ -34,7 +36,8 @@ public abstract class PantryDatabase extends RoomDatabase {
                                     PantryDatabase.class,
                                     "pantry_db"
                             )
-                            .fallbackToDestructiveMigration() // 🔥 avoids crash
+                            .fallbackToDestructiveMigration() // 🔥 avoids crash on schema change
+                            .allowMainThreadQueries() // ⚠️ TEMP (safe for now, remove later)
                             .build();
                 }
             }
@@ -42,8 +45,11 @@ public abstract class PantryDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    // Optional cleanup
+    // 🔹 Optional cleanup
     public static void destroyInstance() {
-        INSTANCE = null;
+        if (INSTANCE != null) {
+            INSTANCE.close();
+            INSTANCE = null;
+        }
     }
 }
