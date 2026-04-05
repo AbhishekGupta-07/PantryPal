@@ -45,9 +45,25 @@ public class PantryListActivity extends AppCompatActivity {
         allItems.clear();
         if (dbItems != null) allItems.addAll(dbItems);
 
-        // ✅ Use YOUR PantryAdapter (2 params)
         adapter = new PantryAdapter(this, new ArrayList<>(allItems));
         recyclerView.setAdapter(adapter);
+
+        // 🔥 APPLY FILTER FROM HOME (IMPORTANT)
+        String filter = getIntent().getStringExtra("filter");
+
+        if (filter != null) {
+            if (filter.equals("expired")) {
+                applyFilter("Expired");
+            } else if (filter.equals("soon")) {
+                applyFilter("Expiring Soon");
+            } else if (filter.equals("safe")) {
+                applyFilter("Safe");
+            } else {
+                applyFilter("All");
+            }
+        } else {
+            applyFilter("All");
+        }
 
         toggleEmptyState();
     }

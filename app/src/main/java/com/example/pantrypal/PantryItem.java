@@ -13,8 +13,8 @@ public class PantryItem {
 
     private String name;
 
-    // ✅ FIXED: quantity should be int
-    private int quantity;
+    // ✅ UPDATED: quantity now String (supports "4 kg", "500 ml")
+    private String quantity;
 
     // ✅ Future-ready: multiple expiry support (comma separated)
     private String expiryDate;
@@ -28,7 +28,7 @@ public class PantryItem {
 
     // ✅ Main constructor (FINAL)
     @Ignore
-    public PantryItem(String name, int quantity, String expiryDate, double price) {
+    public PantryItem(String name, String quantity, String expiryDate, double price) {
         this.name = name;
         this.quantity = quantity;
         this.expiryDate = expiryDate;
@@ -45,7 +45,7 @@ public class PantryItem {
         return name;
     }
 
-    public int getQuantity() {
+    public String getQuantity() {
         return quantity;
     }
 
@@ -67,7 +67,7 @@ public class PantryItem {
         this.name = name;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
 

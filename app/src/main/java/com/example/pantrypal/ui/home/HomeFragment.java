@@ -19,6 +19,7 @@ import com.example.pantrypal.PantryItem;
 import com.example.pantrypal.R;
 import com.example.pantrypal.SavedRecipesActivity;
 import com.example.pantrypal.ui.AddItemOptionsActivity;
+import com.example.pantrypal.PantryListActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -79,6 +80,12 @@ public class HomeFragment extends Fragment {
             startActivity(i);
         });
 
+        // 🔥 CLICK HANDLERS (NEW)
+        tvTotal.setOnClickListener(v -> openPantry("all"));
+        tvExpired.setOnClickListener(v -> openPantry("expired"));
+        tvSoon.setOnClickListener(v -> openPantry("soon"));
+        tvSafe.setOnClickListener(v -> openPantry("safe"));
+
         loadDashboardData();
         updateCounts();
     }
@@ -90,7 +97,7 @@ public class HomeFragment extends Fragment {
         updateCounts();
     }
 
-    // ✅ FIXED (IMPORTANT)
+    // ✅ FIXED COUNTS
     private void updateCounts() {
 
         SharedPreferences prefs = requireContext().getSharedPreferences("recipes", Context.MODE_PRIVATE);
@@ -103,6 +110,13 @@ public class HomeFragment extends Fragment {
 
         tvFavCount.setText(favCount + " Recipes");
         tvSavedCount.setText(savedCount + " Recipes");
+    }
+
+    // 🔥 OPEN PANTRY WITH FILTER
+    private void openPantry(String filter) {
+        Intent i = new Intent(requireContext(), PantryListActivity.class);
+        i.putExtra("filter", filter);
+        startActivity(i);
     }
 
     private void loadDashboardData() {

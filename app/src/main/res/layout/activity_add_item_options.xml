@@ -8,42 +8,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Scan Bill -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/scanBill"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_marginBottom="16dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="6dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/scan_bill"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:gravity="center"/>
-    </androidx.cardview.widget.CardView>
-
-    <!-- Scan Barcode -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/scanBarcode"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_marginBottom="16dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="6dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/scan_barcode"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:gravity="center"/>
-    </androidx.cardview.widget.CardView>
-
     <!-- Manual Entry -->
     <androidx.cardview.widget.CardView
         android:id="@+id/manualEntry"

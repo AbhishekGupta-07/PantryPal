@@ -78,14 +78,10 @@ public class AddItemActivity extends AppCompatActivity {
             return;
         }
 
-        int qty;
-        double price;
+        // ✅ FINAL FIX (String quantity)
+        String qty = qtyStr;
 
-        try {
-            qty = TextUtils.isEmpty(qtyStr) ? 1 : Integer.parseInt(qtyStr);
-        } catch (Exception e) {
-            qty = 1;
-        }
+        double price;
 
         try {
             price = TextUtils.isEmpty(priceStr) ? 0 : Double.parseDouble(priceStr);

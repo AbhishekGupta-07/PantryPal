@@ -50,7 +50,11 @@ public final class PantryDao_Impl implements PantryDao {
         } else {
           statement.bindString(2, entity.getName());
         }
-        statement.bindLong(3, entity.getQuantity());
+        if (entity.getQuantity() == null) {
+          statement.bindNull(3);
+        } else {
+          statement.bindString(3, entity.getQuantity());
+        }
         if (entity.getExpiryDate() == null) {
           statement.bindNull(4);
         } else {
@@ -88,7 +92,11 @@ public final class PantryDao_Impl implements PantryDao {
         } else {
           statement.bindString(2, entity.getName());
         }
-        statement.bindLong(3, entity.getQuantity());
+        if (entity.getQuantity() == null) {
+          statement.bindNull(3);
+        } else {
+          statement.bindString(3, entity.getQuantity());
+        }
         if (entity.getExpiryDate() == null) {
           statement.bindNull(4);
         } else {
@@ -187,8 +195,12 @@ public final class PantryDao_Impl implements PantryDao {
           _tmpName = _cursor.getString(_cursorIndexOfName);
         }
         _item.setName(_tmpName);
-        final int _tmpQuantity;
-        _tmpQuantity = _cursor.getInt(_cursorIndexOfQuantity);
+        final String _tmpQuantity;
+        if (_cursor.isNull(_cursorIndexOfQuantity)) {
+          _tmpQuantity = null;
+        } else {
+          _tmpQuantity = _cursor.getString(_cursorIndexOfQuantity);
+        }
         _item.setQuantity(_tmpQuantity);
         final String _tmpExpiryDate;
         if (_cursor.isNull(_cursorIndexOfExpiryDate)) {

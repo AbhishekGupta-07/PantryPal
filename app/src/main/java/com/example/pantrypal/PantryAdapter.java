@@ -55,7 +55,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
             h.tvPrice.setText("");
         }
 
-        // QUANTITY
+        // QUANTITY (String)
         h.tvQty.setText("Qty: " + item.getQuantity());
 
         // EXPIRY
@@ -147,7 +147,10 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
         EditText etPrice = dialog.findViewById(R.id.etEditPrice);
 
         etName.setText(item.getName());
-        etQty.setText(String.valueOf(item.getQuantity()));
+
+        // ✅ FIXED (String quantity)
+        etQty.setText(item.getQuantity());
+
         etExp.setText(item.getExpiryDate());
         etPrice.setText(String.valueOf(item.getPrice()));
 
@@ -158,15 +161,14 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
 
                     item.setName(etName.getText().toString().trim());
 
-                    int qty = etQty.getText().toString().isEmpty()
-                            ? 1
-                            : Integer.parseInt(etQty.getText().toString());
+                    // ✅ FIXED (no parse, direct string)
+                    String qty = etQty.getText().toString().trim();
+                    item.setQuantity(qty);
 
                     double price = etPrice.getText().toString().isEmpty()
                             ? 0
                             : Double.parseDouble(etPrice.getText().toString());
 
-                    item.setQuantity(qty);
                     item.setPrice(price);
                     item.setExpiryDate(etExp.getText().toString());
 
